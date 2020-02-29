@@ -16,6 +16,12 @@
 `bundle install`
 `bundle exec ruby app.rb`
 
+## Spreadsheet structure
+
+|NIP|Account|
+|-|-|
+`/[0-9]/`|`/[0-9]/`
+
 ## TODO
 
 * ~~Read data from Google Sheets via API~~
