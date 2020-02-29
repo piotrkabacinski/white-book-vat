@@ -7,9 +7,9 @@ Dotenv.load ".env"
 
 require_relative 'src/white_book'
 
-WB = WhiteBook.new
+VAT = WhiteBook::VAT.new
 
-puts WB.get_accounts_list()
-       .request_accounts_data()
-       .check_accounts()
-       .accounts
+puts VAT.get_accounts_list()
+        .request_accounts_data()
+        .check_accounts()
+        .accounts
