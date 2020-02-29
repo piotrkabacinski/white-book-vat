@@ -1,15 +1,17 @@
-# "Bundler.require sets up the load paths and automatically requires every dependency,
-# saving you from having to manually require each one."
-require "bundler"
-Bundler.require
-
-Dotenv.load ".env"
-
 require_relative 'src/white_book'
 
 VAT = WhiteBook::VAT.new
+results = nil
 
-puts VAT.get_accounts_list()
-        .request_accounts_data()
-        .check_accounts()
-        .accounts
+begin
+  results = VAT.get_accounts_list()
+               .request_accounts_data()
+               .check_accounts()
+               .accounts
+rescue StandardError => e
+  puts "An error occurred:"
+  puts e
+  exit
+end
+
+puts results

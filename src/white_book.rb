@@ -1,6 +1,13 @@
 require 'json'
 require 'net/https'
 
+# "Bundler.require sets up the load paths and automatically requires every dependency,
+# saving you from having to manually require each one."
+require "bundler"
+Bundler.require
+
+Dotenv.load ".env"
+
 module WhiteBook
   class VAT
     attr_reader :accounts, :accounts_data
@@ -27,14 +34,11 @@ module WhiteBook
       end
 
       self
-    rescue StandardError => e
-      puts "An error occured while getting sheet data:"
-      raise e
     end
 
     def request_accounts_data
-      if accounts.size == nil
-        exit
+      if accounts.size == 0
+        return self
       end
 
       uri = create_request_URI
@@ -47,12 +51,13 @@ module WhiteBook
       @accounts_data = JSON.parse response.body
 
       self
-    rescue StandardError => e
-      puts "An error occured while gettings accounts data:"
-      raise e
     end
 
     def check_accounts
+      if accounts.size == 0
+        return
+      end
+
       accounts.each do |check|
         record = self.accounts_data["result"]["subjects"].find { |subject| subject["nip"] == check[:nip] }
 
