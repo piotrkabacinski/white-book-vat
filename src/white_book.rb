@@ -1,8 +1,6 @@
 require 'json'
 require 'net/https'
 
-Dotenv.load ".env"
-
 class WhiteBook
   attr_reader :accounts, :accounts_data
 
@@ -12,7 +10,7 @@ class WhiteBook
   end
 
   def get_accounts_list
-    # Initiate session
+    # Initiate session and get sheet content
     session = GoogleDrive::Session.from_service_account_key(ENV["SERVICE_ACCOUNT_FILE"])
     spreadsheet = session.spreadsheet_by_title(ENV["SPREADSHEET_TITLE"])
     worksheet = spreadsheet.worksheets.first
@@ -45,7 +43,7 @@ class WhiteBook
 
     self
   rescue StandardError => e
-    puts "An error occured while accounts data:"
+    puts "An error occured while gettings accounts data:"
     raise e
   end
 

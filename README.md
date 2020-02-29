@@ -9,14 +9,14 @@ Check VAT bank accounts using [MF API](https://www.gov.pl/web/kas/api-wykazu-pod
 * Go to Credentials ("Dane logowania"):
   * "Utwórz dane logowania" > "Konto usługi" > "Dalej"
   * Rola: "Przeglądający > "Dalej"
-  * "Utwórz klucz" > "Typ: JSON" > "Utwórz" (save file in project's root as `service_account.json`).
+  * "Utwórz klucz" > "Typ: JSON" > "Utwórz" (save file in project's root).
   * Save
-* In Google Sheets App: share selected sheet with user from `client_email` key in `service_account.json`.
-* Create .env file based on .env.template (`cp .env.template .env`) and add shared Sheet's files title.
+* In Google Sheets App: share selected sheet with user from `client_email` key in service account json file
+* Create .env file based on .env.template (`cp .env.template .env`) and add shared Sheet's files title and json service account file name
 
 ```
 bundle install
-bundle exec ruby app.rb
+ruby app.rb
 ```
 
 ## Spreadsheet structure
@@ -30,7 +30,7 @@ bundle exec ruby app.rb
 ```
 docker build -t white-book .
 docker run -it white-book bash
-bundle exec ruby app.rb
+ruby app.rb
 ```
 
 ## TODO

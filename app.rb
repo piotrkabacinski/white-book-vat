@@ -3,6 +3,8 @@
 require "bundler"
 Bundler.require
 
+Dotenv.load ".env"
+
 require_relative 'src/white_book'
 
 WB = WhiteBook.new
