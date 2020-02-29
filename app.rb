@@ -4,7 +4,10 @@ require 'net/http'
 # Bundler.require sets up the load paths and automatically requires every dependency,
 # saving you from having to manually require each one.
 require "bundler"
-Bundler.setup(:default)
+Bundler.require
 
-FACT = JSON.parse Net::HTTP.get('cat-fact.herokuapp.com', '/facts/5c72d9b651021f001415f00c')
-puts FACT['text']
+session = GoogleDrive::Session.from_service_account_key("service_account.json")
+spreadsheet = session.spreadsheet_by_title("WhiteBook")
+
+worksheet = spreadsheet.worksheets.first
+worksheet.rows.first(10).each { |row| puts row.first(5).join(",") }
