@@ -1,13 +1,6 @@
 require 'json'
 require 'net/https'
 
-# "Bundler.require sets up the load paths and automatically requires every dependency,
-# saving you from having to manually require each one."
-require "bundler"
-Bundler.require
-
-Dotenv.load ".env"
-
 module WhiteBook
   class VAT
     attr_reader :accounts, :accounts_data, :confimation_response
@@ -19,13 +12,10 @@ module WhiteBook
     end
 
     def get_accounts_list
-      # Initiate session and get sheet content
-      session = GoogleDrive::Session.from_service_account_key(ENV["SERVICE_ACCOUNT_FILE"])
-      spreadsheet = session.spreadsheet_by_title(ENV["SPREADSHEET_TITLE"])
-      worksheet = spreadsheet.worksheets.first
+      rows = request_accounts_list
 
       # Drop first row since it contains only columns labels
-      worksheet.rows.drop(1).each do |nip, account|
+      rows.drop(1).each do |nip, account|
         accounts.push({
           :nip => nip,
           :account => account,
@@ -37,26 +27,17 @@ module WhiteBook
       self
     end
 
-    def request_accounts_data
-      if accounts.size == 0
-        return self
-      end
+    def get_accounts_data
+      accounts_data = request_accounts_data
 
-      uri = create_request_URI
-      response = Net::HTTP.get_response(uri)
-
-      if (response.code != "200")
-        raise "#{JSON.parse(response.body)["message"]}"
-      end
-
-      @confimation_response = response.body
-      @accounts_data = JSON.parse response.body
+      @confimation_response = accounts_data
+      @accounts_data = JSON.parse accounts_data
 
       self
     end
 
     def check_accounts
-      if accounts.size == 0
+      if accounts.size == 0 || accounts_data == nil
         return
       end
 
@@ -76,6 +57,28 @@ module WhiteBook
     end
 
     private
+
+    def request_accounts_data
+      if accounts.size == 0
+        return nil
+      end
+
+      uri = create_request_URI
+      response = Net::HTTP.get_response(uri)
+
+      if (response.code != "200")
+        raise "#{JSON.parse(response.body)["message"]}"
+      end
+
+      response.body
+    end
+
+    def request_accounts_list
+      # Initiate session and get sheet content
+      session = GoogleDrive::Session.from_service_account_key(ENV["SERVICE_ACCOUNT_FILE"])
+      spreadsheet = session.spreadsheet_by_title(ENV["SPREADSHEET_TITLE"])
+      spreadsheet.worksheets.first.rows
+    end
 
     def create_request_URI
       nips = accounts.map { |account| "#{account[:nip]}" }.join ","

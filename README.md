@@ -19,6 +19,12 @@ bundle install
 ruby app.rb
 ```
 
+## Test
+
+```
+rspec src/white_book.spec.rb
+```
+
 ## Spreadsheet structure
 
 |NIP|Account|
@@ -38,7 +44,7 @@ ruby app.rb
 * ~~Read data from Google Sheets via API~~
 * ~~Request data from [MF API](https://wl-api.mf.gov.pl/)~~
 * ~~Return results~~
+* ~~Tests~~
 * Deploy to AWS Lambda
 * Create UI
-* Tests
 
