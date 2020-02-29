@@ -34,8 +34,8 @@ rspec src/white_book.spec.rb
 ## Docker
 
 ```
-docker build -t white-book .
-docker run -it white-book bash
+docker build -t white-book-vat .
+docker run -it white-book-vat bash
 ruby app.rb
 ```
 
