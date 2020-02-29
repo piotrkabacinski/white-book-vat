@@ -6,8 +6,10 @@ require 'net/http'
 require "bundler"
 Bundler.require
 
-session = GoogleDrive::Session.from_service_account_key("service_account.json")
-spreadsheet = session.spreadsheet_by_title("WhiteBook")
+Dotenv.load ".env"
+
+session = GoogleDrive::Session.from_service_account_key(ENV["SERVICE_ACCOUNT_FILE"])
+spreadsheet = session.spreadsheet_by_title(ENV["SPREADSHEET_TITLE"])
 
 worksheet = spreadsheet.worksheets.first
 worksheet.rows.first(10).each { |row| puts row.first(5).join(",") }

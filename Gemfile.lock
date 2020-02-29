@@ -5,6 +5,7 @@ GEM
       public_suffix (>= 2.0.2, < 5.0)
     declarative (0.0.10)
     declarative-option (0.1.0)
+    dotenv (2.7.5)
     faraday (0.17.3)
       multipart-post (>= 1.2, < 3)
     google-api-client (0.32.1)
@@ -53,6 +54,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  dotenv
   google_drive
 
 BUNDLED WITH

@@ -9,8 +9,16 @@
 * Go to Credentials ("Dane logowania"):
   1. "Utwórz dane logowania" > "Konto usługi" > "Dalej"
   2. Rola: "Przeglądający > "Dalej"
-  3. Utwórz klucz > Type: JSON > Utwórz (save file in project's root as `service_account.json`).
+  3. "Utwórz klucz" > "Typ: JSON" > "Utwórz" (save file in project's root as `service_account.json`).
   4. Save
-* In Google Sheet App: go to "Share" and share sheet with user from `client_email` key in `service_account.json`.
+* In Google Sheet App: "Share" and share sheet with user from `client_email` key in `service_account.json`.
 
 `bundle install`
+`bundle exec ruby app.rb`
+
+## TODO
+
+* ~~Read data from Google Sheets via API~~
+* Request data from [MF API](https://wl-api.mf.gov.pl/)
+* Store results and confirmation PDF to S3
+* Return results and link to confirmation package in response
