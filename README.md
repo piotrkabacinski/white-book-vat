@@ -37,6 +37,7 @@ bundle exec ruby app.rb
 
 * ~~Read data from Google Sheets via API~~
 * ~~Request data from [MF API](https://wl-api.mf.gov.pl/)~~
-* Store results and confirmation in AWS S3
 * ~~Return results~~
 * Create UI
+* Tests
+
