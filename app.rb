@@ -7,11 +7,10 @@ begin
   results = VAT.get_accounts_list()
                .request_accounts_data()
                .check_accounts()
-               .accounts
 rescue StandardError => e
   puts "An error occurred:"
   puts e
   exit
 end
 
-puts results
+puts results[:accounts]

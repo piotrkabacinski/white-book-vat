@@ -10,11 +10,12 @@ Dotenv.load ".env"
 
 module WhiteBook
   class VAT
-    attr_reader :accounts, :accounts_data
+    attr_reader :accounts, :accounts_data, :confimation_response
 
     def initialize()
       @accounts = []
       @accounts_data = nil
+      @confimation_response = nil
     end
 
     def get_accounts_list
@@ -48,6 +49,7 @@ module WhiteBook
         raise "#{JSON.parse(response.body)["message"]}"
       end
 
+      @confimation_response = response.body
       @accounts_data = JSON.parse response.body
 
       self
@@ -67,7 +69,10 @@ module WhiteBook
         end
       end
 
-      self
+      {
+        :accounts => accounts,
+        :confimation_response => confimation_response
+      }
     end
 
     private

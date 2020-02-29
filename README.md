@@ -38,6 +38,7 @@ ruby app.rb
 * ~~Read data from Google Sheets via API~~
 * ~~Request data from [MF API](https://wl-api.mf.gov.pl/)~~
 * ~~Return results~~
+* Deploy to AWS Lambda
 * Create UI
 * Tests
 
