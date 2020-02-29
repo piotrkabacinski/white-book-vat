@@ -25,6 +25,14 @@ bundle exec ruby app.rb
 |-|-|
 `/[0-9]/`|`/[0-9]/`
 
+## Docker
+
+```
+docker build -t white-book .
+docker run -it white-book bash
+bundle exec ruby app.rb
+```
+
 ## TODO
 
 * ~~Read data from Google Sheets via API~~
