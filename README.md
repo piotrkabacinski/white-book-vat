@@ -19,7 +19,7 @@ bundle install
 ruby app.rb
 ```
 
-## Test
+## Tests
 
 ```
 rspec src/white_book.spec.rb
