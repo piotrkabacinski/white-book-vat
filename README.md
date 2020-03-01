@@ -52,5 +52,6 @@ ruby app.rb
 * ~~Return results~~
 * ~~Tests~~
 * Deploy to AWS Lambda
+* Store confirmation files in S3 bucket
 * Create UI
 
