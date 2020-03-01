@@ -9,7 +9,7 @@ class VAT < WhiteBook::VAT
         [ "0000000000", "10030040000005556667779999" ],
         [ "1111111111", "20030040000005556667779998" ],
         [ "222222222", "0" ],
-        [ "xxx", ""]
+        [ "xxx", "" ]
     ]
   end
 
@@ -33,7 +33,7 @@ describe VAT do
     expect(@vat.accounts_data).not_to be nil
   end
 
-  it "Should return proper hash" do
+  it "Should return results hash" do
     keys = @vat.check_accounts().keys
 
     expect(keys.index(:accounts)).not_to be nil
