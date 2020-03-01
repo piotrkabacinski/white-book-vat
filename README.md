@@ -5,7 +5,7 @@ Check VAT bank accounts using [MF API](https://www.gov.pl/web/kas/api-wykazu-pod
 ## Setup
 
 * Create new project in [Google API Console](https://console.developers.google.com/)
-* Elable *Google Drive* and *Sheets* API for the project (Library > *Selected API* > Enable)
+* Enable Google Drive and Sheets API for the project (Library > *Selected API* > Enable)
 * Go to Credentials section:
   * Create Credentials > Service account > Create
   * Role: "Borwser" > Continue
