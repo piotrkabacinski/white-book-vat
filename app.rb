@@ -4,6 +4,8 @@ require "bundler"
 Bundler.require
 Dotenv.load ".env"
 
+require 'httplog'
+
 require './src/white_book'
 
 def handler(event:, context:)
@@ -11,8 +13,8 @@ def handler(event:, context:)
   results = nil
 
   begin
-    results = vat.get_accounts_list
-                 .get_accounts_data
+    results = vat.create_accounts_list
+                 .create_accounts_data
                  .check_accounts
 
     {

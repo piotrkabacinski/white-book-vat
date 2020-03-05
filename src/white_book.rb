@@ -15,24 +15,26 @@ module WhiteBook
       @confimation_response = nil
     end
 
-    def get_accounts_list
-      rows = request_accounts_list
+    def create_accounts_list
+      sheet = GoogleSheet.new
+      rows = sheet.sheet
 
       # Drop first row since it contains only columns labels
-      rows.drop(1).each do |nip, account|
-        accounts.push({
+      @accounts = rows.drop(1).map do |nip, account|
+        {
           :nip => nip,
           :account => account,
           :found => false,
           :valid => nil
-        })
+        }
       end
 
       self
     end
 
-    def get_accounts_data
-      accounts_data = request_accounts_data
+    def create_accounts_data
+      mf_api = MfAPI.new accounts
+      accounts_data = mf_api.accounts_data
 
       @confimation_response = accounts_data
       @accounts_data = JSON.parse accounts_data
@@ -48,10 +50,10 @@ module WhiteBook
       accounts.each do |check|
         record = self.accounts_data["result"]["subjects"].find { |subject| subject["nip"] == check[:nip] }
 
-        if record != nil
-          check[:found] = true
-          check[:valid] = record["accountNumbers"].find { |account| account == check[:account] } != nil
-        end
+        next if record.nil?
+
+        check[:found] = true
+        check[:valid] = !record["accountNumbers"].find { |account| account == check[:account] }.nil?
       end
 
       {
@@ -59,15 +61,17 @@ module WhiteBook
         :confimation_response => confimation_response
       }
     end
+  end
 
-    private
+  class MfAPI
+    def initialize(accounts)
+      @accounts = accounts
+    end
 
-    def request_accounts_data
-      if accounts.size == 0
-        return nil
-      end
+    def accounts_data
+      return nil if @accounts.size.zero?
 
-      uri = create_request_URI
+      uri = mf_uri
       response = Net::HTTP.get_response(uri)
 
       if (response.code != "200")
@@ -77,13 +81,10 @@ module WhiteBook
       response.body
     end
 
-    def request_accounts_list
-      sheet = GoogleSheet.new
-      sheet.sheet
-    end
+    private
 
-    def create_request_URI
-      nips = accounts.map { |account| "#{account[:nip]}" }.join ","
+    def mf_uri
+      nips = @accounts.map { |account| "#{account[:nip]}" }.join ","
       date = Time.now.strftime("%Y-%m-%d")
 
       URI("#{ENV["MF_API_BASE"]}/api/search/nips/#{nips}?date=#{date}")
