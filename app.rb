@@ -4,6 +4,8 @@ require "bundler"
 Bundler.require
 Dotenv.load ".env"
 
+# require 'httplog'
+
 require './src/white_book'
 
 def handler(event:, context:)
