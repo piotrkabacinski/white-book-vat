@@ -17,7 +17,7 @@ Check VAT bank accounts using [MF API](https://www.gov.pl/web/kas/api-wykazu-pod
 ```Bash
 # Project requires Ruby >= 2.4
 
-$ bundle install
+$ bundle install # --path vendor/bundle
 $ ruby app.rb
 ```
 
@@ -34,6 +34,15 @@ Sheet requires two columns for NIP and account number, proceeded by label:
 | NIP       | Account   |
 | --------- | --------- |
 | `/[0-9]/` | `/[0-9]/` |
+
+## AWS Lambda
+
+* Awesome [AWS tutorial](https://aws.amazon.com/blogs/compute/announcing-ruby-support-for-aws-lambda/)
+* [AWS SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
+
+```
+sh aws_lambda.sh
+```
 
 ## Docker
 
@@ -53,7 +62,6 @@ ruby app.rb
 * ~~Request data from [MF API](https://wl-api.mf.gov.pl/)~~
 * ~~Return results~~
 * ~~Tests~~
-* Deploy to AWS Lambda
+* ~~Deploy to AWS Lambda~~
 * Store confirmation files in S3 bucket
 * Create UI
-

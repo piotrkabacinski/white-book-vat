@@ -6,17 +6,23 @@ Dotenv.load ".env"
 
 require './src/white_book'
 
-VAT = WhiteBook::VAT.new
-results = nil
+def handler(event:, context:)
+  vat = WhiteBook::VAT.new
+  results = nil
 
-begin
-  results = VAT.get_accounts_list
-               .get_accounts_data
-               .check_accounts
-rescue StandardError => e
-  puts "An error occurred:"
-  puts e
-  exit
+  begin
+    results = vat.get_accounts_list
+                 .get_accounts_data
+                 .check_accounts
+
+    {
+      statusCode: 200,
+      body: JSON.generate(results[:accounts])
+    }
+  rescue StandardError => e
+    {
+      statusCode: 422,
+      body: JSON.generate(e)
+    }
+  end
 end
-
-puts results[:accounts]

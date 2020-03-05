@@ -79,7 +79,7 @@ module WhiteBook
 
     def request_accounts_list
       sheet = GoogleSheet.new
-      sheet.get_sheet
+      sheet.sheet
     end
 
     def create_request_URI
@@ -91,7 +91,7 @@ module WhiteBook
   end
 
   class GoogleSheet
-    def get_sheet
+    def sheet
       service = Google::Apis::SheetsV4::SheetsService.new
       service.client_options.application_name = "White Book VAT"
       service.authorization = authorizer
