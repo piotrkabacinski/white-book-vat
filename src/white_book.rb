@@ -1,11 +1,15 @@
 require 'json'
 require 'net/https'
+require "fileutils"
+require "google/apis/sheets_v4"
+require "googleauth"
+require "googleauth/stores/file_token_store"
 
 module WhiteBook
   class VAT
     attr_reader :accounts, :accounts_data, :confimation_response
 
-    def initialize()
+    def initialize
       @accounts = []
       @accounts_data = nil
       @confimation_response = nil
@@ -74,10 +78,8 @@ module WhiteBook
     end
 
     def request_accounts_list
-      # Initiate session and get sheet content
-      session = GoogleDrive::Session.from_service_account_key(ENV["SERVICE_ACCOUNT_FILE"])
-      spreadsheet = session.spreadsheet_by_title(ENV["SPREADSHEET_TITLE"])
-      spreadsheet.worksheets.first.rows
+      sheet = GoogleSheet.new
+      sheet.get_sheet
     end
 
     def create_request_URI
@@ -85,6 +87,31 @@ module WhiteBook
       date = Time.now.strftime("%Y-%m-%d")
 
       URI("#{ENV["MF_API_BASE"]}/api/search/nips/#{nips}?date=#{date}")
+    end
+  end
+
+  class GoogleSheet
+    def get_sheet
+      service = Google::Apis::SheetsV4::SheetsService.new
+      service.client_options.application_name = "White Book VAT"
+      service.authorization = authorizer
+
+      spreadsheet_id = ENV["SPREADSHEET_ID"]
+      range = "A1:C"
+      response = service.get_spreadsheet_values spreadsheet_id, range
+
+      raise "No data found." if response.values.empty?
+
+      response.values
+    end
+
+    private
+
+    def authorizer
+      Google::Auth::ServiceAccountCredentials.make_creds(
+        json_key_io: File.open(ENV["SERVICE_FILE"]),
+        scope: Google::Apis::SheetsV4::AUTH_SPREADSHEETS_READONLY
+      )
     end
   end
 end
