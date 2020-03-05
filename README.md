@@ -12,9 +12,11 @@ Check VAT bank accounts using [MF API](https://www.gov.pl/web/kas/api-wykazu-pod
   * Create kye > Key type: JSON > Create
   * Save file in project's root.
 * In Google Sheets App: share selected sheet with user from `client_email` key in service account json file
-* Create .env file based on .env.template (`cp .env.template .env`) and add shared Sheet's files title and json service account file name
+* Create .env file based on .env.template (`cp .env.template .env`) and add shared Sheet's file id (can be found in its URL) and json service account file name
 
-```
+```Bash
+# Project requires Ruby >= 2.4
+
 $ bundle install
 $ ruby app.rb
 ```
@@ -29,9 +31,9 @@ rspec src/white_book.spec.rb
 
 Sheet requires two columns for NIP and account number, proceeded by label:
 
-|NIP|Account|
-|-|-|
-`/[0-9]/`|`/[0-9]/`
+| NIP       | Account   |
+| --------- | --------- |
+| `/[0-9]/` | `/[0-9]/` |
 
 ## Docker
 
@@ -40,7 +42,7 @@ Sheet requires two columns for NIP and account number, proceeded by label:
 docker build -t white-book-vat .
 
 # Run container and start session using bash shell
-docker run -it white-book-vat bash
+docker run -it -v $PWD:/home/app white-book-vat bash
 
 ruby app.rb
 ```
