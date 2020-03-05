@@ -4,7 +4,7 @@ require "bundler"
 Bundler.require
 Dotenv.load ".env"
 
-require 'httplog'
+# require 'httplog'
 
 require './src/white_book'
 
