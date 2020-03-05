@@ -24,12 +24,12 @@ describe VAT do
   end
 
   it "Should create accounts list" do
-    @vat.get_accounts_list
+    @vat.create_accounts_list
     expect(@vat.accounts.size).to be 4
   end
 
   it "Should create accounts data" do
-    @vat.get_accounts_data
+    @vat.create_accounts_data
     expect(@vat.accounts_data).not_to be nil
   end
 
