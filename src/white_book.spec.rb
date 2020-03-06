@@ -2,8 +2,6 @@ require 'dotenv'
 require 'webmock/rspec'
 require './src/white_book'
 
-Dotenv.load ".env"
-
 include WebMock::API
 include WhiteBook
 
