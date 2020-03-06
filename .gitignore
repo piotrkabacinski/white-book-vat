@@ -44,6 +44,7 @@ build-iPhoneSimulator/
 /vendor/bundle
 /lib/bundler/man/
 
+/tmp
 .env
 *.json
 packaged-template.yaml

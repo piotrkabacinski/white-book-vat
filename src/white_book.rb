@@ -1,10 +1,11 @@
-require "json"
-require "net/https"
+require 'aws-sdk-s3'
+require "dotenv"
 require "fileutils"
 require "google/apis/sheets_v4"
 require "googleauth"
 require "googleauth/stores/file_token_store"
-require "dotenv"
+require "json"
+require "net/https"
 
 Dotenv.load ".env"
 
@@ -122,6 +123,26 @@ module WhiteBook
   class AWSStore
     def initialize(content)
       @content_to_save = content
+    end
+
+    def store
+      s3 = Aws::S3::Resource.new(region: ENV["S3_REGION"])
+      file_name = create_file
+
+      obj = s3.bucket(ENV["S3_BUCKET"]).object("reports/#{file_name}")
+      obj.upload_file("/tmp/#{file_name}")
+    end
+
+    def create_file
+      return unless @content_to_save != nil
+
+      file_name = "#{Time.now.strftime("%Y%m%d_%H%M%S")}.json"
+
+      out_file = File.new("/tmp/#{file_name}", "w")
+      out_file.puts(@content_to_save)
+      out_file.close
+
+      file_name
     end
   end
 end

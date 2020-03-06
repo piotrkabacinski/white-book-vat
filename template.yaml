@@ -14,5 +14,5 @@ Outputs:
     Description: White Book VAT
     Value:
       Fn::GetAtt:
-      - WhiteBookVAT
-      - Arn
+        - WhiteBookVAT
+        - Arn
