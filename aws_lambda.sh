@@ -1,10 +1,11 @@
+eval "$(grep ^S3_BUCKET= .env)"
+eval "$(grep ^S3_REGION= .env)"
+
 sam package --template-file template.yaml \
---profile sandbox \
 --output-template-file packaged-template.yaml \
---s3-bucket codequest-white-book-vat &&
+--s3-bucket $S3_BUCKET &&
 
 sam deploy --template-file packaged-template.yaml \
---region eu-central-1 \
---profile sandbox \
+--region $S3_REGION \
 --stack-name WhiteBookVat \
 --capabilities CAPABILITY_IAM

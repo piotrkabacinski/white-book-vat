@@ -40,7 +40,7 @@ Sheet requires two columns for NIP and account number, containing only number va
 - Awesome [AWS tutorial](https://aws.amazon.com/blogs/compute/announcing-ruby-support-for-aws-lambda/)
 - Get [AWS SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
 - Add `S3_BUCKET` and `S3_REGION` in `.env` file.
-- Add bucket permissions to your Lambda.
+- Add S3 write permissions to your Lambda.
 
 ```
 sh aws_lambda.sh

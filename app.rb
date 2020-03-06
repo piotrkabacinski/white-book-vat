@@ -1,22 +1,21 @@
 require "./src/white_book"
 include WhiteBook
 
-# require "httplog"
-
-def handler (event:, context:)
+def handler(event:, context:)
   vat = VAT.new
-  results = nil
 
   begin
     results = vat.create_accounts_list
                  .create_accounts_data
                  .check_accounts
 
+    confirmation_url = vat.store
+
     {
       statusCode: 200,
       body: JSON.generate({
         results: results[:accounts],
-        confirmation_url: results[:confirmation_url]
+        confirmation_url: confirmation_url
       })
     }
   rescue StandardError => e

@@ -1,4 +1,4 @@
-require 'aws-sdk-s3'
+require "aws-sdk-s3"
 require "dotenv"
 require "fileutils"
 require "google/apis/sheets_v4"
@@ -60,20 +60,18 @@ module WhiteBook
         check[:valid] = !record["accountNumbers"].find { |account| account == check[:account] }.nil?
       end
 
-      stored_file = store
-
       {
         :accounts => accounts,
         :confimation_response => confimation_response,
-        :confirmation_url => "https://#{ENV["S3_BUCKET"]}.s3.#{ENV["S3_REGION"]}.amazonaws.com/reports/#{stored_file}"
       }
     end
 
-    private
-
     def store
-      file = AWSStore.new @confimation_response
-      file.store
+      return nil if confimation_response == nil
+
+      file = AWSStore.new confimation_response
+      stored_file = file.store
+      "https://#{ENV["S3_BUCKET"]}.s3.#{ENV["S3_REGION"]}.amazonaws.com/reports/#{stored_file}"
     end
   end
 
