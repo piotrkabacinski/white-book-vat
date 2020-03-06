@@ -60,10 +60,20 @@ module WhiteBook
         check[:valid] = !record["accountNumbers"].find { |account| account == check[:account] }.nil?
       end
 
+      stored_file = store
+
       {
         :accounts => accounts,
-        :confimation_response => confimation_response
+        :confimation_response => confimation_response,
+        :confirmation_url => "https://#{ENV["S3_BUCKET"]}.s3.#{ENV["S3_REGION"]}.amazonaws.com/reports/#{stored_file}"
       }
+    end
+
+    private
+
+    def store
+      file = AWSStore.new @confimation_response
+      file.store
     end
   end
 
@@ -131,12 +141,14 @@ module WhiteBook
 
       obj = s3.bucket(ENV["S3_BUCKET"]).object("reports/#{file_name}")
       obj.upload_file("/tmp/#{file_name}")
+
+      file_name
     end
 
     def create_file
       return unless @content_to_save != nil
 
-      file_name = "#{Time.now.strftime("%Y%m%d_%H%M%S")}.json"
+      file_name = "#{Time.now.strftime("%Y%m%d_%H%M%S")}_confirmation.json"
 
       out_file = File.new("/tmp/#{file_name}", "w")
       out_file.puts(@content_to_save)
