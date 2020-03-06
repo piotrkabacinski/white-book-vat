@@ -1,4 +1,3 @@
 .git
-.bundle
-vendor
 Gemfile.lock
+.bash_history

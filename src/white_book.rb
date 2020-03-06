@@ -118,4 +118,10 @@ module WhiteBook
       )
     end
   end
+
+  class AWSStore
+    def initialize(content)
+      @content_to_save = content
+    end
+  end
 end
