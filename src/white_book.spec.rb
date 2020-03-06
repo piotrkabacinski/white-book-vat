@@ -6,10 +6,6 @@ include WebMock::API
 Dotenv.load ".env"
 
 describe WhiteBook::VAT do
-  it "Should be initiated" do
-    expect(subject).to be_an(WhiteBook::VAT)
-  end
-
   before(:each) do
     stub_request(:post, /www.googleapis.com/).to_return(
       status: 200,
@@ -27,24 +23,24 @@ describe WhiteBook::VAT do
       status: 200,
       body: '{"result":{"subjects":[{"name":"JAN KOWALSKI","nip":"0000000000","statusVat":"Czynny","regon":"999999999","pesel":null,"krs":null,"residenceAddress":"KWIATOWA 1/2, 00-001 WARSZAWA","workingAddress":null,"representatives":[],"authorizedClerks":[],"partners":[],"registrationLegalDate":"2016-01-01","registrationDenialBasis":null,"registrationDenialDate":null,"restorationBasis":null,"restorationDate":null,"removalBasis":null,"removalDate":null,"accountNumbers":["10030040000005556667779999"],"hasVirtualAccounts":false},{"name":"FOOBAR SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ","nip":"1111111111","statusVat":"Czynny","regon":"888888888","pesel":null,"krs":"0000424242","residenceAddress":null,"workingAddress":"WIOSENNA 10, 00-123 WARSZAWA","representatives":[],"authorizedClerks":[],"partners":[],"registrationLegalDate":"2014-01-01","registrationDenialBasis":null,"registrationDenialDate":null,"restorationBasis":null,"restorationDate":null,"removalBasis":null,"removalDate":null,"accountNumbers":["20030040000005556667779998","20030040000005556667779997"],"hasVirtualAccounts":false},{"name":"BAZBAR SPÓŁKA Z OGRANICZONĄ ODPOWIEDZIALNOŚCIĄ","nip":"222222222","statusVat":"Czynny","regon":"333333333","pesel":null,"krs":"0000323232","residenceAddress":null,"workingAddress":"ZIMOWA 1, 00-999 WARSZAWA","representatives":[],"authorizedClerks":[],"partners":[],"registrationLegalDate":"2015-01-01","registrationDenialBasis":null,"registrationDenialDate":null,"restorationBasis":null,"restorationDate":null,"removalBasis":null,"removalDate":null,"accountNumbers":["30030040000005556667779998","30030040000005556667779997"],"hasVirtualAccounts":false}],"requestDateTime":"29-02-2020 13:56:42","requestId":"m6fg9-11w5eli"}}',
     )
+
+    subject.create_accounts_list
+    subject.create_accounts_data
+  end
+
+  it "Should be initiated" do
+    expect(subject).to be_an(WhiteBook::VAT)
   end
 
   it "Should create accounts list" do
-    subject.create_accounts_list
     expect(subject.accounts.length).to be 5
   end
 
   it "Should create accounts data" do
-    subject.create_accounts_list
-    subject.create_accounts_data
-
     expect(subject.accounts_data).not_to be nil
   end
 
   it "Should return results hash" do
-    subject.create_accounts_list
-    subject.create_accounts_data
-
     results = subject.check_accounts
 
     expect(results.key?(:accounts)).to be true
@@ -52,8 +48,6 @@ describe WhiteBook::VAT do
   end
 
   it "Should generate proper results" do
-    subject.create_accounts_list
-    subject.create_accounts_data
     results = subject.check_accounts[:accounts]
 
     expect(results.select { |result| result[:found] }.size).to be 3
