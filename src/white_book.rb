@@ -1,10 +1,11 @@
-require "json"
-require "net/https"
+require "aws-sdk-s3"
+require "dotenv"
 require "fileutils"
 require "google/apis/sheets_v4"
 require "googleauth"
 require "googleauth/stores/file_token_store"
-require "dotenv"
+require "json"
+require "net/https"
 
 Dotenv.load ".env"
 
@@ -61,8 +62,16 @@ module WhiteBook
 
       {
         :accounts => accounts,
-        :confimation_response => confimation_response
+        :confimation_response => confimation_response,
       }
+    end
+
+    def store
+      return nil if confimation_response == nil
+
+      file = AWSStore.new confimation_response
+      stored_file = file.store
+      "https://#{ENV["S3_BUCKET"]}.s3.#{ENV["S3_REGION"]}.amazonaws.com/reports/#{stored_file}"
     end
   end
 
@@ -116,6 +125,34 @@ module WhiteBook
         json_key_io: File.open(ENV["SERVICE_FILE"]),
         scope: Google::Apis::SheetsV4::AUTH_SPREADSHEETS_READONLY
       )
+    end
+  end
+
+  class AWSStore
+    def initialize(content)
+      @content_to_save = content
+    end
+
+    def store
+      s3 = Aws::S3::Resource.new(region: ENV["S3_REGION"])
+      file_name = create_file
+
+      obj = s3.bucket(ENV["S3_BUCKET"]).object("reports/#{file_name}")
+      obj.upload_file("/tmp/#{file_name}")
+
+      file_name
+    end
+
+    def create_file
+      return unless @content_to_save != nil
+
+      file_name = "#{Time.now.strftime("%Y%m%d_%H%M%S")}_confirmation.json"
+
+      out_file = File.new("/tmp/#{file_name}", "w")
+      out_file.puts(@content_to_save)
+      out_file.close
+
+      file_name
     end
   end
 end
