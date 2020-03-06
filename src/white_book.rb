@@ -1,10 +1,10 @@
-require 'json'
-require 'net/https'
+require "json"
+require "net/https"
 require "fileutils"
 require "google/apis/sheets_v4"
 require "googleauth"
 require "googleauth/stores/file_token_store"
-require 'dotenv'
+require "dotenv"
 
 Dotenv.load ".env"
 

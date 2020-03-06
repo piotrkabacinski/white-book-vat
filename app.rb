@@ -1,7 +1,7 @@
-require './src/white_book'
+require "./src/white_book"
 include WhiteBook
 
-# require 'httplog'
+# require "httplog"
 
 def handler(event:, context:)
   vat = VAT.new
