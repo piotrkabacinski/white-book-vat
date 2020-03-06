@@ -2,10 +2,12 @@ require 'dotenv'
 require 'webmock/rspec'
 require './src/white_book'
 
-include WebMock::API
 Dotenv.load ".env"
 
-describe WhiteBook::VAT do
+include WebMock::API
+include WhiteBook
+
+describe VAT do
   before(:each) do
     stub_request(:post, /www.googleapis.com/).to_return(
       status: 200,
@@ -29,7 +31,7 @@ describe WhiteBook::VAT do
   end
 
   it "Should be initiated" do
-    expect(subject).to be_an(WhiteBook::VAT)
+    expect(subject).to be_an(VAT)
   end
 
   it "Should create accounts list" do
