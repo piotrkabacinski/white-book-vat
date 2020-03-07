@@ -82,3 +82,7 @@ ruby app.rb
 - ~~Deploy to AWS Lambda~~
 - ~~Store confirmation files in S3 bucket~~
 - ~~Create UI~~ (created using Google Sheets environemnt)
+
+## Licence
+
+[CC BY-NC 3.0](https://creativecommons.org/licenses/by-nc/3.0/)
