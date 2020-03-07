@@ -29,3 +29,6 @@ def handler(event: nil, context: nil)
     }
   end
 end
+
+# To launch script locally, uncomment this line:
+# puts handler
