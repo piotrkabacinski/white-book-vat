@@ -1,5 +1,7 @@
 # White Book VAT
 
+🇵🇱Sprawdź konta bankowe na podstawie NIP w API [Biała Księga](https://www.gov.pl/web/kas/api-wykazu-podatnikow-vat) Ministerstwa Finansów.
+
 Check VAT bank accounts using [MF API](https://www.gov.pl/web/kas/api-wykazu-podatnikow-vat) and Google Sheets.
 
 ## Setup
