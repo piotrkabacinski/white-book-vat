@@ -11,7 +11,7 @@ Using Google Sheets as an interface:
 - Create new Spreadhseet in Google Suite
 - As a sheet owner: `Tools` > `Script editor`
 - Paste script content from `sheet.gs` with provided API URL
-- To launch script use newly created option in Sheets top menu: `Accounts check` > `Check data`
+- To launch script use newly created option in Sheets top menu: `Accounts check` > `Check data`. Before first run you will have to provide required accesses for the script (read and update sheet).
 
 Using Google Sheets as a data source:
 

@@ -39,18 +39,17 @@ function checkData() {
   dateTimeCell.setValue(response["date_time"]);
   confirmationCell.setValue(response["confirmation_url"]);
 
-  var initialCell = 2;
-
   for (var index in response.results) {
-    var cell = initialCell + Number(index);
+    var cell = 2 + Number(index);
+    var result = response.results[index];
 
-    if (response.results[index]["nip"] !== "") {
+    if (result["nip"] !== "") {
       sheet
         .getRange("C" + cell)
-        .setValue(response.results[index]["found"] ? "1" : "0");
+        .setValue(result["found"] ? "1" : "0");
       sheet
         .getRange("D" + cell)
-        .setValue(response.results[index]["valid"] ? "1" : "0");
+        .setValue(result["valid"] ? "1" : "0");
     }
   }
 }
