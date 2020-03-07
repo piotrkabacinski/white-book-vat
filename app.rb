@@ -2,7 +2,9 @@ require "./src/white_book"
 include WhiteBook
 
 def handler(event:, context:)
-  vat = VAT.new
+  accounts_to_check = JSON.parse(event["body"])["data"]
+
+  vat = VAT.new accounts_to_check
 
   begin
     results = vat.create_accounts_list
@@ -15,6 +17,8 @@ def handler(event:, context:)
       statusCode: 200,
       body: JSON.generate({
         results: results[:accounts],
+        request_id: results[:request_id],
+        date_time: results[:date_time],
         confirmation_url: confirmation_url
       })
     }

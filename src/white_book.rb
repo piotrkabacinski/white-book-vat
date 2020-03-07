@@ -11,20 +11,17 @@ Dotenv.load ".env"
 
 module WhiteBook
   class VAT
-    attr_reader :accounts, :accounts_data, :confimation_response
+    attr_reader :accounts, :accounts_data, :confimation_response, :search_id
 
-    def initialize
-      @accounts = []
+    def initialize(accounts = [])
+      @accounts = accounts
       @accounts_data = nil
       @confimation_response = nil
+      @request_id = nil
     end
 
     def create_accounts_list
-      sheet = GoogleSheet.new
-      rows = sheet.sheet
-
-      # Drop first row since it contains only labels columns
-      @accounts = rows.drop(1).map do |nip, account|
+      @accounts = accounts.map do |nip, account|
         {
           :nip => nip,
           :account => account,
@@ -42,6 +39,7 @@ module WhiteBook
 
       @confimation_response = accounts_data.freeze
       @accounts_data = JSON.parse accounts_data
+      @request_id = @accounts_data["result"]["requestId"]
 
       self
     end
@@ -61,8 +59,10 @@ module WhiteBook
       end
 
       {
-        :accounts => accounts,
-        :confimation_response => confimation_response,
+        accounts: accounts,
+        date_time: Time.now.strftime("%Y-%m-%d %H:%M:%S"),
+        request_id: @request_id,
+        confimation_response: confimation_response,
       }
     end
 
@@ -110,7 +110,7 @@ module WhiteBook
       service.authorization = authorizer
 
       spreadsheet_id = ENV["SPREADSHEET_ID"]
-      range = "A1:B"
+      range = "A2:B30"
       response = service.get_spreadsheet_values spreadsheet_id, range
 
       raise "No data found in spreadsheet." if response.values.empty?
