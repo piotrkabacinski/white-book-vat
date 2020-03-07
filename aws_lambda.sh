@@ -1,6 +1,10 @@
-eval "$(grep ^S3_BUCKET= .env)"
-eval "$(grep ^S3_REGION= .env)"
-eval "$(grep ^AWS_PROFILE= .env)"
+function getEnvValue() {
+  eval "$(grep ^$1= .env)"
+}
+
+getEnvValue "S3_BUCKET"
+getEnvValue "S3_REGION"
+getEnvValue "AWS_PROFILE"
 
 sam package --template-file template.yaml \
 --output-template-file packaged-template.yaml \
