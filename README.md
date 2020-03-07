@@ -4,11 +4,12 @@ Check VAT bank accounts using [MF API](https://www.gov.pl/web/kas/api-wykazu-pod
 
 ## Setup
 
-Using Google Sheets as an inteface:
+Using Google Sheets as an interface:
 
 - Create new Spreadhseet in Google Suite
 - As a sheet owner: `Tools` > `Script editor`
 - Paste script content from `sheets.gs` with provided API URL
+- To launch script use newly created option in Sheets top menu: `Accounts check` > `Check data`
 
 Using Google Sheets as a data source:
 
@@ -40,15 +41,15 @@ rspec src/white_book.spec.rb
 
 Sheet script reserves specific columns and cells:
 
-| Scope  | Description           |
-| ------ | --------------------- |
-| A2:A31 | NIP numbers           |
-| B2:B31 | Account numbers       |
-| C2:C31 | Found state value     |
-| D2:D31 | Valid state value     |
-| G1     | Request date time     |
-| G2     | Request ID            |
-| G3     | Confirmation file URL |
+| Scope  | Description           | Value type |
+| ------ | --------------------- | ---------- |
+| A2:A31 | NIP numbers           | Text       |
+| B2:B31 | Account numbers       | Text       |
+| C2:C31 | Found state value     | `0 | 1`    |
+| D2:D31 | Valid state value     | `0 | 1`    |
+| G1     | Request date time     | Date time  |
+| G2     | Request ID            | Text       |
+| G3     | Confirmation file URL | Text       |
 
 ## AWS Lambda deployment
 
@@ -80,4 +81,4 @@ ruby app.rb
 - ~~Tests~~
 - ~~Deploy to AWS Lambda~~
 - ~~Store confirmation files in S3 bucket~~
-- ~~Create UI~~ (created using Sheets environemnt)
+- ~~Create UI~~ (created using Google Sheets environemnt)
