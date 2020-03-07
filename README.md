@@ -4,6 +4,14 @@ Check VAT bank accounts using [MF API](https://www.gov.pl/web/kas/api-wykazu-pod
 
 ## Setup
 
+Using Google Sheets as an inteface:
+
+- Create new Spreadhseet in Google Suite
+- As a sheet owner: `Tools` > `Script editor`
+- Paste script content from `sheets.gs` with provided API URL
+
+Using Google Sheets as a data source:
+
 - Create new project in [Google API Console](https://console.developers.google.com/)
 - Enable Google Drive and Sheets API for the project (Library > _Selected API_ > Enable)
 - Go to Credentials section:
@@ -12,7 +20,8 @@ Check VAT bank accounts using [MF API](https://www.gov.pl/web/kas/api-wykazu-pod
   - Create kye > Key type: JSON > Create
   - Save file in project's root.
 - In Google Sheets App: share selected sheet with user from `client_email` key in service account json file
-- Create .env file based on .env.template (`cp .env.template .env`) and add shared Sheet's file id (can be found in its URL) and json service account file name
+
+Create `.env` file based on .env.template (`cp .env.template .env`) and add shared Sheet's file id (can be found in its URL) and json service account file name
 
 ```Bash
 # Project requires Ruby >= 2.4
@@ -29,13 +38,19 @@ rspec src/white_book.spec.rb
 
 ## Spreadsheet structure
 
-Sheet requires two columns for NIP and account number, containing only number values, proceeded by label:
+Sheet script reserves specific columns and cells:
 
-| NIP          | Account      |
-| ------------ | ------------ |
-| `/^[0-9]*$/` | `/^[0-9]*$/` |
+| Scope  | Description           |
+| ------ | --------------------- |
+| A2:A31 | NIP numbers           |
+| B2:B31 | Account numbers       |
+| C2:C31 | Found state value     |
+| D2:D31 | Valid state value     |
+| G1     | Request date time     |
+| G2     | Request ID            |
+| G3     | Confirmation file URL |
 
-## AWS Lambda
+## AWS Lambda deployment
 
 - Please read [Lambda ruby tutorial](https://aws.amazon.com/blogs/compute/announcing-ruby-support-for-aws-lambda/) using [AWS SAM](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/serverless-sam-cli-install.html)
 - Add `S3_BUCKET`, `S3_REGION` (and `AWS_PROFILE` name if need) in `.env` file.
@@ -65,4 +80,4 @@ ruby app.rb
 - ~~Tests~~
 - ~~Deploy to AWS Lambda~~
 - ~~Store confirmation files in S3 bucket~~
-- Create UI
+- ~~Create UI~~ (created using Sheets environemnt)

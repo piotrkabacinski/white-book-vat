@@ -1,12 +1,12 @@
 require "./src/white_book"
 include WhiteBook
 
-def handler(event:, context:)
-  accounts_to_check = JSON.parse(event["body"])["data"]
-
-  vat = VAT.new accounts_to_check
-
+def handler(event: nil, context: nil)
   begin
+    sheet_raw_data = context != nil ? JSON.parse(event["body"])["data"] : nil
+
+    vat = VAT.new sheet_raw_data
+
     results = vat.create_accounts_list
                  .create_accounts_data
                  .check_accounts
@@ -29,4 +29,3 @@ def handler(event:, context:)
     }
   end
 end
-

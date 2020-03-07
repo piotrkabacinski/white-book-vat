@@ -13,15 +13,22 @@ module WhiteBook
   class VAT
     attr_reader :accounts, :accounts_data, :confimation_response, :search_id
 
-    def initialize(accounts = [])
-      @accounts = accounts
+    def initialize(sheet_raw_data = nil)
+      @sheet_raw_data = sheet_raw_data
       @accounts_data = nil
       @confimation_response = nil
       @request_id = nil
     end
 
     def create_accounts_list
-      @accounts = accounts.map do |nip, account|
+      sheet = @sheet_raw_data
+
+      if sheet == nil
+        source_sheet = GoogleSheet.new
+        sheet = source_sheet.sheet
+      end
+
+      @accounts = sheet.map do |nip, account|
         {
           :nip => nip,
           :account => account,
@@ -110,7 +117,7 @@ module WhiteBook
       service.authorization = authorizer
 
       spreadsheet_id = ENV["SPREADSHEET_ID"]
-      range = "A2:B30"
+      range = "A2:B31"
       response = service.get_spreadsheet_values spreadsheet_id, range
 
       raise "No data found in spreadsheet." if response.values.empty?
