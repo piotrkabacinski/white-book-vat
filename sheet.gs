@@ -10,22 +10,22 @@ function onOpen() {
 function checkData() {
   var sheet = SpreadsheetApp.getActiveSheet();
 
-  sheet.getRange("C2:C30").clear();
-  sheet.getRange("D2:D30").clear();
+  sheet.getRange("C2:C30").clearContent()
+  sheet.getRange("D2:D30").clearContent()
 
   var dateTimeCell = sheet.getRange("G1");
   var requestIdCell = sheet.getRange("G2");
   var confirmationCell = sheet.getRange("G3");
 
-  requestIdCell.clear();
-  dateTimeCell.clear();
-  confirmationCell.clear();
+  requestIdCell.clearContent();
+  dateTimeCell.clearContent();
+  confirmationCell.clearContent();
 
   var options = {
     'method' : 'post',
     'contentType': 'application/json',
     'payload' : JSON.stringify({
-      data: sheet.getRange("A2:B30").getValues()
+      data: sheet.getRange("A2:B31").getValues()
     })
   };
 
@@ -48,6 +48,4 @@ function checkData() {
       sheet.getRange('D' + cell).setValue(response.results[index]["valid"] ? "1" : "0");
     }
   }
-
-  // Browser.msgBox("Done! Confirmaton file: " + response["confirmation_url"])
 }
