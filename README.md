@@ -45,8 +45,8 @@ Sheet script reserves specific columns and cells:
 | ------ | --------------------- | ---------- |
 | A2:A31 | NIP numbers           | Text       |
 | B2:B31 | Account numbers       | Text       |
-| C2:C31 | Found state value     | `0 | 1`    |
-| D2:D31 | Valid state value     | `0 | 1`    |
+| C2:C31 | Found state value     | 0 &#124; 1    |
+| D2:D31 | Valid state value     | 0 &#124; 1    |
 | G1     | Request date time     | Date time  |
 | G2     | Request ID            | Text       |
 | G3     | Confirmation file URL | Text       |
