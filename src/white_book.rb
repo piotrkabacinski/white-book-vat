@@ -23,7 +23,7 @@ module WhiteBook
       sheet = GoogleSheet.new
       rows = sheet.sheet
 
-      # Drop first row since it contains only columns labels
+      # Drop first row since it contains only labels columns
       @accounts = rows.drop(1).map do |nip, account|
         {
           :nip => nip,
@@ -40,7 +40,7 @@ module WhiteBook
       mf_api = MfAPI.new accounts
       accounts_data = mf_api.accounts_data
 
-      @confimation_response = accounts_data
+      @confimation_response = accounts_data.freeze
       @accounts_data = JSON.parse accounts_data
 
       self
@@ -57,7 +57,7 @@ module WhiteBook
         next if record.nil?
 
         check[:found] = true
-        check[:valid] = !record["accountNumbers"].find { |account| account == check[:account] }.nil?
+        check[:valid] = record["accountNumbers"].find { |account| account == check[:account] }.nil? == false
       end
 
       {
@@ -69,7 +69,7 @@ module WhiteBook
     def store
       return nil if confimation_response == nil
 
-      file = AWSStore.new confimation_response
+      file = BucketS3.new confimation_response
       stored_file = file.store
       "https://#{ENV["S3_BUCKET"]}.s3.#{ENV["S3_REGION"]}.amazonaws.com/reports/#{stored_file}"
     end
@@ -110,10 +110,10 @@ module WhiteBook
       service.authorization = authorizer
 
       spreadsheet_id = ENV["SPREADSHEET_ID"]
-      range = "A1:C"
+      range = "A1:B"
       response = service.get_spreadsheet_values spreadsheet_id, range
 
-      raise "No data found." if response.values.empty?
+      raise "No data found in spreadsheet." if response.values.empty?
 
       response.values
     end
@@ -128,9 +128,9 @@ module WhiteBook
     end
   end
 
-  class AWSStore
-    def initialize(content)
-      @content_to_save = content
+  class BucketS3
+    def initialize(confirmationJson)
+      @content_to_save = confirmationJson
     end
 
     def store
@@ -143,10 +143,13 @@ module WhiteBook
       file_name
     end
 
+    private
+
     def create_file
       return unless @content_to_save != nil
 
-      file_name = "#{Time.now.strftime("%Y%m%d_%H%M%S")}_confirmation.json"
+      request_id = JSON.parse(@content_to_save)["result"]["requestId"]
+      file_name = "#{Time.now.strftime("%Y-%m-%d_%H%M%S")}_#{request_id}_confirmation.json"
 
       out_file = File.new("/tmp/#{file_name}", "w")
       out_file.puts(@content_to_save)
