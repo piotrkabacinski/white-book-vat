@@ -117,7 +117,7 @@ module WhiteBook
       service.authorization = authorizer
 
       spreadsheet_id = ENV["SPREADSHEET_ID"]
-      range = "A2:B31"
+      range = "A6:B36"
       response = service.get_spreadsheet_values spreadsheet_id, range
 
       raise "No data found in spreadsheet." if response.values.empty?

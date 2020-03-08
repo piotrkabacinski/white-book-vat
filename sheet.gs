@@ -1,7 +1,7 @@
 var CONFIG = {
-  api: ""
+  api:
+    ""
 };
-
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
 
@@ -13,12 +13,12 @@ function onOpen() {
 function checkData() {
   var sheet = SpreadsheetApp.getActiveSheet();
 
-  sheet.getRange("C2:C30").clearContent();
-  sheet.getRange("D2:D30").clearContent();
+  sheet.getRange("C6:C36").clearContent();
+  sheet.getRange("D6:D36").clearContent();
 
-  var dateTimeCell = sheet.getRange("G1");
-  var requestIdCell = sheet.getRange("G2");
-  var confirmationCell = sheet.getRange("G3");
+  var dateTimeCell = sheet.getRange("B1");
+  var requestIdCell = sheet.getRange("B2");
+  var confirmationCell = sheet.getRange("B3");
 
   requestIdCell.clearContent();
   dateTimeCell.clearContent();
@@ -28,7 +28,7 @@ function checkData() {
     method: "post",
     contentType: "application/json",
     payload: JSON.stringify({
-      data: sheet.getRange("A2:B31").getValues()
+      data: sheet.getRange("A6:B36").getValues()
     })
   };
 
@@ -40,7 +40,7 @@ function checkData() {
   confirmationCell.setValue(response["confirmation_url"]);
 
   for (var index in response.results) {
-    var cell = 2 + Number(index);
+    var cell = 6 + Number(index);
     var result = response.results[index];
 
     if (result["nip"] !== "") {
