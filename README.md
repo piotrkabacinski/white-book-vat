@@ -45,13 +45,13 @@ Sheet script reserves specific columns and cells:
 
 | Scope  | Description           | Value type |
 | ------ | --------------------- | ---------- |
-| A2:A31 | NIP numbers           | Text       |
-| B2:B31 | Account numbers       | Text       |
-| C2:C31 | Found state value     | 0 &#124; 1 |
-| D2:D31 | Valid state value     | 0 &#124; 1 |
-| G1     | Request date time     | Date time  |
-| G2     | Request ID            | Text       |
-| G3     | Confirmation file URL | Text       |
+| A6:A36 | NIP numbers           | Text       |
+| B6:B36 | Account numbers       | Text       |
+| C6:C36 | Found state value     | 0 &#124; 1 |
+| D6:D36 | Valid state value     | 0 &#124; 1 |
+| B1     | Request date time     | Date time  |
+| B2     | Request ID            | Text       |
+| B3     | Confirmation file URL | Text       |
 
 ## AWS Lambda deployment
 
@@ -83,7 +83,7 @@ ruby app.rb
 - ~~Tests~~
 - ~~Deploy to AWS Lambda~~
 - ~~Store confirmation files in S3 bucket~~
-- ~~Create UI~~ (created using Google Sheets environemnt)
+- ~~Create UI~~
 
 ## Licence
 
