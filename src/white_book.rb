@@ -37,7 +37,7 @@ module WhiteBook
         }
       end
 
-      self
+      @accounts
     end
 
     def create_accounts_data
@@ -48,7 +48,7 @@ module WhiteBook
       @accounts_data = JSON.parse accounts_data
       @request_id = @accounts_data["result"]["requestId"]
 
-      self
+      @accounts_data
     end
 
     def check_accounts
@@ -145,6 +145,8 @@ module WhiteBook
       file_name = create_file
 
       obj = s3.bucket(ENV["S3_BUCKET"]).object("reports/#{file_name}")
+
+      # AWS Lambda requires to store files in /tmp/ directory to be accesable
       obj.upload_file("/tmp/#{file_name}")
 
       file_name
