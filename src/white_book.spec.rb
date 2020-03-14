@@ -15,7 +15,7 @@ describe VAT do
 
     stub_request(:get, /sheets.googleapis/).to_return(
       status: 200,
-      body: '{ "values": [ [ "0000000000", "10030040000005556667779999" ], [ "1111111111", "20030040000005556667779998" ], [ "222222222", "0" ], [ "000", "0" ], [ "xxx", "" ] ] }',
+      body: '{ "values": [ [ "000 000-0000", "1003 004 000000 555666 7779999" ], [ "1111111111", "20030040000005556667779998" ], [ "222222222", "0" ], [ "000", "0" ], [ "xxx", "" ] ] }',
       headers: { 'Content-Type'=>'application/json' }
     )
 
@@ -32,6 +32,13 @@ describe VAT do
 
   it "Should be initiated" do
     expect(subject).to be_an(VAT)
+  end
+
+  it "Should remove non digit characteres from NIP and Account numbers" do
+    subject.accounts.each do |account|
+      expect(account[:nip] =~ /[^0-9]/).to be nil
+      expect(account[:account] =~ /[^0-9]/).to be nil
+    end
   end
 
   it "Should create accounts list" do

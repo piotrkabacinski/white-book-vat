@@ -30,10 +30,10 @@ module WhiteBook
 
       @accounts = sheet.map do |nip, account|
         {
-          :nip => nip,
-          :account => account,
-          :found => false,
-          :valid => nil
+          nip: nip.to_s.tr('^0-9', ''),
+          account: account.to_s.tr('^0-9', ''),
+          found: false,
+          valid: nil
         }
       end
 
