@@ -1,6 +1,7 @@
 var CONFIG = {
   api: ""
 };
+
 function onOpen() {
   var ui = SpreadsheetApp.getUi();
 

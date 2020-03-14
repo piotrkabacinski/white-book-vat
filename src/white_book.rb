@@ -77,8 +77,7 @@ module WhiteBook
       return nil if confimation_response == nil
 
       file = BucketS3.new confimation_response
-      stored_file = file.store
-      "https://#{ENV["S3_BUCKET"]}.s3.#{ENV["S3_REGION"]}.amazonaws.com/reports/#{stored_file}"
+      file.store
     end
   end
 
@@ -138,18 +137,22 @@ module WhiteBook
   class BucketS3
     def initialize(confirmationJson)
       @content_to_save = confirmationJson
+      # AWS Lambda requires to store files in /tmp/ directory to be accesable
+      @dir = "/tmp/"
     end
 
     def store
       s3 = Aws::S3::Resource.new(region: ENV["S3_REGION"])
       file_name = create_file
+      file_path = @dir + file_name
 
       obj = s3.bucket(ENV["S3_BUCKET"]).object("reports/#{file_name}")
 
-      # AWS Lambda requires to store files in /tmp/ directory to be accesable
-      obj.upload_file("/tmp/#{file_name}")
+      obj.upload_file(file_path)
 
-      file_name
+      File.delete(file_path) if File.exist?(file_path)
+
+      "https://#{ENV["S3_BUCKET"]}.s3.#{ENV["S3_REGION"]}.amazonaws.com/reports/#{file_name}"
     end
 
     private
@@ -160,7 +163,7 @@ module WhiteBook
       request_id = JSON.parse(@content_to_save)["result"]["requestId"]
       file_name = "#{Time.now.strftime("%Y-%m-%d_%H%M%S")}_#{request_id}_confirmation.json"
 
-      out_file = File.new("/tmp/#{file_name}", "w")
+      out_file = File.new(@dir + file_name, "w")
       out_file.puts(@content_to_save)
       out_file.close
 
