@@ -43,15 +43,15 @@ rspec src/white_book.spec.rb
 
 Sheet script reserves specific columns and cells:
 
-| Scope  | Description           | Value type |
-| ------ | --------------------- | ---------- |
-| A6:A36 | NIP numbers           | Text       |
-| B6:B36 | Account numbers       | Text       |
-| C6:C36 | Found state value     | 0 &#124; 1 |
-| D6:D36 | Valid state value     | 0 &#124; 1 |
-| B1     | Request date time     | Date time  |
-| B2     | Request ID            | Text       |
-| B3     | Confirmation file URL | Text       |
+| Scope  | Description           | Value type          |
+| ------ | --------------------- | ------------------- |
+| A6:A36 | NIP numbers           | Text                |
+| B6:B36 | Account numbers       | Text                |
+| C6:C36 | Found state value     | 0 &#124; 1          |
+| D6:D36 | Valid state value     | 0 &#124; 1          |
+| B1     | Request date          | ❗️Text (YYY-MM-DD) |
+| B2     | Request ID            | Text                |
+| B3     | Confirmation file URL | Text                |
 
 ## AWS Lambda deployment
 
@@ -84,6 +84,7 @@ ruby app.rb
 - ~~Deploy to AWS Lambda~~
 - ~~Store confirmation files in S3 bucket~~
 - ~~Create UI~~
+- Timezones handling for custom date inputs
 
 ## Licence
 

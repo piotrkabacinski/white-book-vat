@@ -20,6 +20,8 @@ function checkData() {
   var requestIdCell = sheet.getRange("B2");
   var confirmationCell = sheet.getRange("B3");
 
+  var date = dateTimeCell.getValue();
+
   requestIdCell.clearContent();
   dateTimeCell.clearContent();
   confirmationCell.clearContent();
@@ -27,8 +29,9 @@ function checkData() {
   var options = {
     method: "post",
     contentType: "application/json",
+    muteHttpExceptions: false,
     payload: JSON.stringify({
-      date: dateTimeCell.getValues(),
+      date: date,
       data: sheet.getRange("A6:B36").getValues()
     })
   };
