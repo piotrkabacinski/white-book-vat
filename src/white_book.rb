@@ -11,7 +11,7 @@ Dotenv.load ".env"
 
 module WhiteBook
   class VAT
-    attr_reader :accounts, :accounts_data, :confimation_response, :search_id
+    attr_reader :accounts, :accounts_data, :confimation_response, :search_id, :date
 
     def initialize(sheet_raw_data = nil, date = nil)
       @sheet_raw_data = sheet_raw_data
@@ -42,7 +42,7 @@ module WhiteBook
     end
 
     def create_accounts_data
-      mf_api = MfAPI.new accounts @date
+      mf_api = MfAPI.new(accounts, @date)
       accounts_data = mf_api.accounts_data
 
       @confimation_response = accounts_data.freeze
@@ -68,7 +68,7 @@ module WhiteBook
 
       {
         accounts: accounts,
-        date_time: @date != nil ? @date : Time.now.strftime("%Y-%m-%d %H:%M:%S"),
+        date_time: @date != nil ? @date : Time.now.strftime("%Y-%m-%d"),
         request_id: @request_id,
         confimation_response: confimation_response,
       }
@@ -77,7 +77,7 @@ module WhiteBook
     def store
       return nil if confimation_response == nil
 
-      file = BucketS3.new confimation_response @date
+      file = BucketS3.new(confimation_response, @date)
       file.store
     end
   end
@@ -164,7 +164,7 @@ module WhiteBook
       return unless @content_to_save != nil
 
       request_id = JSON.parse(@content_to_save)["result"]["requestId"]
-      scope_date = @date != nil ? @date : Time.now.strftime("%Y-%m-%d_%H%M%S")
+      scope_date = @date != nil ? @date : Time.now.strftime("%Y-%m-%d")
       file_name = "#{scope_date}_#{request_id}_confirmation.json"
 
       out_file = File.new(@dir + file_name, "w")

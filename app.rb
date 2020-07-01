@@ -8,7 +8,7 @@ def handler(event: nil, context: nil)
     date = sheet_raw_data != nil ? sheet_raw_data["date"] : nil
     vat_data = sheet_raw_data != nil ? sheet_raw_data["data"] : nil
 
-    vat = VAT.new vat_data date
+    vat = VAT.new(vat_data, date)
 
     vat.create_accounts_list
     vat.create_accounts_data
@@ -34,5 +34,7 @@ def handler(event: nil, context: nil)
   end
 end
 
-# To launch script locally, uncomment this line:
+# To launch script locally, uncomment this line,
+# sheet data will be requested by script directly:
+
 # puts handler
