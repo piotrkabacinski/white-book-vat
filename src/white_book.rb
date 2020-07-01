@@ -13,8 +13,9 @@ module WhiteBook
   class VAT
     attr_reader :accounts, :accounts_data, :confimation_response, :search_id
 
-    def initialize(sheet_raw_data = nil)
+    def initialize(sheet_raw_data = nil, date = nil)
       @sheet_raw_data = sheet_raw_data
+      @date = date
       @accounts_data = nil
       @confimation_response = nil
       @request_id = nil
@@ -41,7 +42,7 @@ module WhiteBook
     end
 
     def create_accounts_data
-      mf_api = MfAPI.new accounts
+      mf_api = MfAPI.new accounts @date
       accounts_data = mf_api.accounts_data
 
       @confimation_response = accounts_data.freeze
@@ -67,7 +68,7 @@ module WhiteBook
 
       {
         accounts: accounts,
-        date_time: Time.now.strftime("%Y-%m-%d %H:%M:%S"),
+        date_time: @date != nil ? @date : Time.now.strftime("%Y-%m-%d %H:%M:%S"),
         request_id: @request_id,
         confimation_response: confimation_response,
       }
@@ -76,14 +77,15 @@ module WhiteBook
     def store
       return nil if confimation_response == nil
 
-      file = BucketS3.new confimation_response
+      file = BucketS3.new confimation_response @date
       file.store
     end
   end
 
   class MfAPI
-    def initialize(accounts)
+    def initialize(accounts, date = nil)
       @accounts = accounts
+      @date = date
     end
 
     def accounts_data
@@ -103,9 +105,9 @@ module WhiteBook
 
     def mf_uri
       nips = @accounts.map { |account| "#{account[:nip]}" }.join ","
-      date = Time.now.strftime("%Y-%m-%d")
+      scope_date = @date != nil ? @date : Time.now.strftime("%Y-%m-%d")
 
-      URI("#{ENV["MF_API_BASE"]}/api/search/nips/#{nips}?date=#{date}")
+      URI("#{ENV["MF_API_BASE"]}/api/search/nips/#{nips}?date=#{scope_date}")
     end
   end
 
@@ -135,10 +137,11 @@ module WhiteBook
   end
 
   class BucketS3
-    def initialize(confirmationJson)
+    def initialize(confirmationJson, date = nil)
       @content_to_save = confirmationJson
       # AWS Lambda requires to store files in /tmp/ directory to be accesable
       @dir = "/tmp/"
+      @date = date
     end
 
     def store
@@ -161,7 +164,8 @@ module WhiteBook
       return unless @content_to_save != nil
 
       request_id = JSON.parse(@content_to_save)["result"]["requestId"]
-      file_name = "#{Time.now.strftime("%Y-%m-%d_%H%M%S")}_#{request_id}_confirmation.json"
+      scope_date = @date != nil ? @date : Time.now.strftime("%Y-%m-%d_%H%M%S")
+      file_name = "#{scope_date}_#{request_id}_confirmation.json"
 
       out_file = File.new(@dir + file_name, "w")
       out_file.puts(@content_to_save)

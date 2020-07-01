@@ -1,5 +1,5 @@
 var CONFIG = {
-  api: ""
+  apiUrl: ""
 };
 
 function onOpen() {
@@ -28,11 +28,12 @@ function checkData() {
     method: "post",
     contentType: "application/json",
     payload: JSON.stringify({
+      date: dateTimeCell.getValues(),
       data: sheet.getRange("A6:B36").getValues()
     })
   };
 
-  var request = UrlFetchApp.fetch(CONFIG.api, options);
+  var request = UrlFetchApp.fetch(CONFIG.apiUrl, options);
   var response = JSON.parse(request.getContentText());
 
   requestIdCell.setValue(response["request_id"]);

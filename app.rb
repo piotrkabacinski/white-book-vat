@@ -3,9 +3,12 @@ include WhiteBook
 
 def handler(event: nil, context: nil)
   begin
-    sheet_raw_data = event != nil ? JSON.parse(event["body"])["data"] : nil
+    sheet_raw_data = event != nil ? JSON.parse(event["body"]) : nil
 
-    vat = VAT.new sheet_raw_data
+    date = sheet_raw_data != nil ? sheet_raw_data["date"] : nil
+    vat_data = sheet_raw_data != nil ? sheet_raw_data["data"] : nil
+
+    vat = VAT.new vat_data date
 
     vat.create_accounts_list
     vat.create_accounts_data
