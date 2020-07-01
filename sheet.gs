@@ -1,5 +1,5 @@
 var CONFIG = {
-  api: ""
+  apiUrl: ""
 };
 
 function onOpen() {
@@ -20,6 +20,8 @@ function checkData() {
   var requestIdCell = sheet.getRange("B2");
   var confirmationCell = sheet.getRange("B3");
 
+  var date = dateTimeCell.getValue();
+
   requestIdCell.clearContent();
   dateTimeCell.clearContent();
   confirmationCell.clearContent();
@@ -27,12 +29,14 @@ function checkData() {
   var options = {
     method: "post",
     contentType: "application/json",
+    muteHttpExceptions: false,
     payload: JSON.stringify({
+      date: date,
       data: sheet.getRange("A6:B36").getValues()
     })
   };
 
-  var request = UrlFetchApp.fetch(CONFIG.api, options);
+  var request = UrlFetchApp.fetch(CONFIG.apiUrl, options);
   var response = JSON.parse(request.getContentText());
 
   requestIdCell.setValue(response["request_id"]);
