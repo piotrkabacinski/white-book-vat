@@ -15,10 +15,14 @@ module WhiteBook
 
     def initialize(sheet_raw_data = nil, date = nil)
       @sheet_raw_data = sheet_raw_data
-      @date = date
+      @date = set_date(date)
       @accounts_data = nil
       @confimation_response = nil
       @request_id = nil
+    end
+
+    def set_date(date)
+      date && !date.empty? ? date : Time.now.strftime("%Y-%m-%d")
     end
 
     def create_accounts_list
@@ -68,7 +72,7 @@ module WhiteBook
 
       {
         accounts: accounts,
-        date_time: @date != nil ? @date : Time.now.strftime("%Y-%m-%d"),
+        date_time: @date,
         request_id: @request_id,
         confimation_response: confimation_response,
       }
@@ -105,7 +109,7 @@ module WhiteBook
 
     def mf_uri
       nips = @accounts.map { |account| "#{account[:nip]}" }.join ","
-      scope_date = @date != nil ? @date : Time.now.strftime("%Y-%m-%d")
+      scope_date = @date
 
       URI("#{ENV["MF_API_BASE"]}/api/search/nips/#{nips}?date=#{scope_date}")
     end
@@ -164,7 +168,7 @@ module WhiteBook
       return unless @content_to_save != nil
 
       request_id = JSON.parse(@content_to_save)["result"]["requestId"]
-      scope_date = @date != nil ? @date : Time.now.strftime("%Y-%m-%d")
+      scope_date = @date
       file_name = "#{scope_date}_#{request_id}_confirmation.json"
 
       out_file = File.new(@dir + file_name, "w")
