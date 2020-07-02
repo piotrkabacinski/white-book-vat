@@ -11,7 +11,7 @@ function onOpen() {
 }
 
 function formatDate(date) {
-  var date = new Date(date);
+  var date = date ? new Date(date) : new Date();
 
   var year = date.getFullYear();
   var month = date.getMonth() + 1;
