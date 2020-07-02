@@ -49,7 +49,7 @@ Sheet script reserves specific columns and cells:
 | B6:B36 | Account numbers       | Text              |
 | C6:C36 | Found state value     | 0 &#124; 1        |
 | D6:D36 | Valid state value     | 0 &#124; 1        |
-| B1     | Request date          | Text (YYYY-MM-DD) |
+| B1     | Request date          | Date (YYYY-MM-DD) |
 | B2     | Request ID            | Text              |
 | B3     | Confirmation file URL | Text              |
 

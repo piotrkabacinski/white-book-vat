@@ -10,6 +10,19 @@ function onOpen() {
     .addToUi();
 }
 
+function formatDate(date) {
+  var date = new Date(date);
+
+  var year = date.getFullYear();
+  var month = date.getMonth() + 1;
+  var day = date.getDate();
+
+  day = day < 10 ? `0${day}` : day;
+  month = month < 10 ? `0${month}` : month;
+
+  return `${year}-${month}-${day}`;
+}
+
 function checkData() {
   var sheet = SpreadsheetApp.getActiveSheet();
 
@@ -31,7 +44,7 @@ function checkData() {
     contentType: "application/json",
     muteHttpExceptions: false,
     payload: JSON.stringify({
-      date: date,
+      date: formatDate(date),
       data: sheet.getRange("A6:B36").getValues()
     })
   };
