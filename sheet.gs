@@ -67,6 +67,9 @@ function checkData() {
       sheet
         .getRange("D" + cell)
         .setValue(result["valid"] ? "1" : "0");
+      sheet
+        .getRange("E" + cell)
+        .setValue(result["virtual"] ? "1" : "0");
     }
   }
 }
