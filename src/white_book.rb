@@ -74,7 +74,7 @@ module WhiteBook
 
       {
         accounts: accounts,
-        date_time: @date,
+        date: @date,
         request_id: @request_id,
         confimation_response: confimation_response,
       }

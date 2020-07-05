@@ -22,7 +22,7 @@ def handler(event: nil, context: nil)
       body: JSON.generate({
         results: results[:accounts],
         request_id: results[:request_id],
-        date_time: results[:date_time],
+        date: results[:date],
         confirmation_url: confirmation_url
       })
     }

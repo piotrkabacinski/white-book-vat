@@ -53,7 +53,7 @@ function checkData() {
   var response = JSON.parse(request.getContentText());
 
   requestIdCell.setValue(response["request_id"]);
-  dateTimeCell.setValue(response["date_time"]);
+  dateTimeCell.setValue(response["date"]);
   confirmationCell.setValue(response["confirmation_url"]);
 
   for (var index in response.results) {
