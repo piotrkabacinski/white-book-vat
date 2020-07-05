@@ -28,6 +28,7 @@ function checkData() {
 
   sheet.getRange("C6:C36").clearContent();
   sheet.getRange("D6:D36").clearContent();
+  sheet.getRange("E6:E36").clearContent();
 
   var dateTimeCell = sheet.getRange("B1");
   var requestIdCell = sheet.getRange("B2");
