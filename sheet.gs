@@ -28,6 +28,7 @@ function checkData() {
 
   sheet.getRange("C6:C36").clearContent();
   sheet.getRange("D6:D36").clearContent();
+  sheet.getRange("E6:E36").clearContent();
 
   var dateTimeCell = sheet.getRange("B1");
   var requestIdCell = sheet.getRange("B2");
@@ -53,7 +54,7 @@ function checkData() {
   var response = JSON.parse(request.getContentText());
 
   requestIdCell.setValue(response["request_id"]);
-  dateTimeCell.setValue(response["date_time"]);
+  dateTimeCell.setValue(response["date"]);
   confirmationCell.setValue(response["confirmation_url"]);
 
   for (var index in response.results) {
@@ -67,6 +68,9 @@ function checkData() {
       sheet
         .getRange("D" + cell)
         .setValue(result["valid"] ? "1" : "0");
+      sheet
+        .getRange("E" + cell)
+        .setValue(result["virtual"] ? "1" : "0");
     }
   }
 }

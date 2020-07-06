@@ -38,7 +38,8 @@ module WhiteBook
           nip: nip.to_s.tr('^0-9', ''),
           account: account.to_s.tr('^0-9', ''),
           found: false,
-          valid: nil
+          valid: nil,
+          virtual: false
         }
       end
 
@@ -68,11 +69,12 @@ module WhiteBook
 
         check[:found] = true
         check[:valid] = record["accountNumbers"].find { |account| account == check[:account] }.nil? == false
+        check[:virtual] = record["hasVirtualAccounts"]
       end
 
       {
         accounts: accounts,
-        date_time: @date,
+        date: @date,
         request_id: @request_id,
         confimation_response: confimation_response,
       }
