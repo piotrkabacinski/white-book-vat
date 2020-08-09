@@ -35,11 +35,14 @@ module WhiteBook
 
       @accounts = sheet.map do |nip, account|
         {
-          nip: nip.to_s.tr('^0-9', ''),
+          nip: nil,
           account: account.to_s.tr('^0-9', ''),
+          accountFound: false,
           found: false,
           valid: nil,
-          virtual: false
+          virtual: false,
+          company: nil,
+          requestId: nil
         }
       end
 
@@ -47,12 +50,22 @@ module WhiteBook
     end
 
     def create_accounts_data
-      mf_api = MfAPI.new(accounts, @date)
-      accounts_data = mf_api.accounts_data
+      mf_api = MfAPI.new(@date)
+
+      accounts_data = []
+
+      @accounts.each { |subject|
+        if subject[:account] == ""
+          accounts_data.push(nil)
+          next
+        end
+
+        account_data = mf_api.account_data(subject[:account])
+        accounts_data.push(JSON.parse(account_data))
+      }
 
       @confimation_response = accounts_data.freeze
-      @accounts_data = JSON.parse accounts_data
-      @request_id = @accounts_data["result"]["requestId"]
+      @accounts_data = accounts_data
 
       @accounts_data
     end
@@ -62,14 +75,22 @@ module WhiteBook
         return
       end
 
-      accounts.each do |check|
-        record = self.accounts_data["result"]["subjects"].find { |subject| subject["nip"] == check[:nip] }
-
+      accounts.each_with_index do |record, index|
         next if record.nil?
+        next accounts_data[index].nil?
 
-        check[:found] = true
-        check[:valid] = record["accountNumbers"].find { |account| account == check[:account] }.nil? == false
-        check[:virtual] = record["hasVirtualAccounts"]
+        response_data = accounts_data[index]["result"]["subjects"].first
+
+        record[:accountFound] = response_data["bankAccounts"].find { |bankAccount|
+          bankAccount == record[:account]
+        }
+
+        record[:found] = true
+        record[:valid] = response_data["statusVat"] == "Czynny"
+        record[:nip] = response_data["nip"]
+        record[:hasVirtualAccounts] = response_data["hasVirtualAccounts"]
+        record[:company] = response_data["name"]
+        record[:requestId] = response_data["requestId"]
       end
 
       {
@@ -89,15 +110,15 @@ module WhiteBook
   end
 
   class MfAPI
-    def initialize(accounts, date = nil)
-      @accounts = accounts
+    def initialize(date = nil)
       @date = date
     end
 
-    def accounts_data
-      return nil if @accounts.size.zero?
+    def account_data(account_number = nil)
+      return nil if account_number == nil
 
-      uri = mf_uri
+      uri = mf_uri(account_number)
+
       response = Net::HTTP.get_response(uri)
 
       if (response.code != "200")
@@ -109,11 +130,8 @@ module WhiteBook
 
     private
 
-    def mf_uri
-      nips = @accounts.map { |account| "#{account[:nip]}" }.join ","
-      scope_date = @date
-
-      URI("#{ENV["MF_API_BASE"]}/api/search/nips/#{nips}?date=#{scope_date}")
+    def mf_uri(bank_account)
+      URI("#{ENV["MF_API_BASE"]}/api/search/bank-accounts/#{bank_account}?date=#{@date}")
     end
   end
 
@@ -169,7 +187,6 @@ module WhiteBook
     def create_file
       return unless @content_to_save != nil
 
-      request_id = JSON.parse(@content_to_save)["result"]["requestId"]
       scope_date = @date
       file_name = "#{scope_date}_#{request_id}_confirmation.json"
 

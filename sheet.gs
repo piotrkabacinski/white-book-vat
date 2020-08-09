@@ -61,7 +61,7 @@ function checkData() {
     var cell = 6 + Number(index);
     var result = response.results[index];
 
-    if (result["nip"] !== "") {
+    if (result !== null) {
       sheet
         .getRange("C" + cell)
         .setValue(result["found"] ? "1" : "0");

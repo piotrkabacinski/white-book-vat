@@ -14,27 +14,29 @@ def handler(event: nil, context: nil)
     vat.create_accounts_data
 
     results = vat.check_accounts
-
-    confirmation_url = vat.store
+    # confirmation_url = vat.store
 
     {
       statusCode: 200,
       body: JSON.generate({
-        results: results[:accounts],
-        request_id: results[:request_id],
-        date: results[:date],
-        confirmation_url: confirmation_url
+        data: results.to_json
+        # results: results[:accounts],
+        # request_id: results[:request_id],
+        # date: results[:date],
+        # confirmation_url: confirmation_url
       })
     }
-  rescue StandardError => e
-    {
-      statusCode: 422,
-      body: JSON.generate(e)
-    }
+  # rescue StandardError => e
+  #   puts e
+  #   {
+  #     statusCode: 422,
+  #     body: JSON.generate(e)
+  #   }
+  # end
   end
 end
 
 # To launch script locally, uncomment this line,
 # sheet data will be requested by script directly:
 
-# puts handler
+puts handler
