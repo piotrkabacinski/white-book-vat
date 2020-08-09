@@ -29,14 +29,15 @@ function checkData() {
   sheet.getRange("C6:C36").clearContent();
   sheet.getRange("D6:D36").clearContent();
   sheet.getRange("E6:E36").clearContent();
+  sheet.getRange("F6:F36").clearContent();
+  sheet.getRange("G6:G36").clearContent();
+  sheet.getRange("H6:H36").clearContent();
 
   var dateTimeCell = sheet.getRange("B1");
-  var requestIdCell = sheet.getRange("B2");
-  var confirmationCell = sheet.getRange("B3");
+  var confirmationCell = sheet.getRange("B2");
 
   var date = dateTimeCell.getValue();
 
-  requestIdCell.clearContent();
   dateTimeCell.clearContent();
   confirmationCell.clearContent();
 
@@ -53,7 +54,6 @@ function checkData() {
   var request = UrlFetchApp.fetch(CONFIG.apiUrl, options);
   var response = JSON.parse(request.getContentText());
 
-  requestIdCell.setValue(response["request_id"]);
   dateTimeCell.setValue(response["date"]);
   confirmationCell.setValue(response["confirmation_url"]);
 
@@ -71,6 +71,15 @@ function checkData() {
       sheet
         .getRange("E" + cell)
         .setValue(result["virtual"] ? "1" : "0");
+      sheet
+        .getRange("F" + cell)
+        .setValue(result["nip"]);
+      sheet
+        .getRange("G" + cell)
+        .setValue(result["company"]);
+      sheet
+        .getRange("H" + cell)
+        .setValue(result["requestId"]);
     }
   }
 }
