@@ -61,7 +61,7 @@ function checkData() {
     var cell = 6 + Number(index);
     var result = response.results[index];
 
-    if (result !== null) {
+    if (result["checked"]) {
       sheet
         .getRange("C" + cell)
         .setValue(result["found"] ? "1" : "0");
@@ -70,7 +70,7 @@ function checkData() {
         .setValue(result["valid"] ? "1" : "0");
       sheet
         .getRange("E" + cell)
-        .setValue(result["virtual"] ? "1" : "0");
+        .setValue(result["hasVirtual"] && !result["accountFound"] ? "1" : "0");
       sheet
         .getRange("F" + cell)
         .setValue(result["nip"]);

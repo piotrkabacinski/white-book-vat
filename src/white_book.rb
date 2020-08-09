@@ -40,9 +40,10 @@ module WhiteBook
           company: nil,
           found: false,
           nip: nil,
-          requestId: nil
+          requestId: nil,
           valid: false,
-          virtual: false,
+          hasVirtual: false,
+          checked: false
         }
       end
 
@@ -81,16 +82,14 @@ module WhiteBook
 
         response_data = accounts_data[index]["result"]["subjects"].first
 
-        record[:accountFound] = response_data["accountNumbers"].find { |bankAccount|
-          bankAccount == record[:account]
-        }
-
+        record[:accountFound] = response_data["accountNumbers"].include?(record[:account])
+        record[:checked] = true
         record[:found] = true
         record[:valid] = response_data["statusVat"] == "Czynny"
         record[:nip] = response_data["nip"]
-        record[:hasVirtualAccounts] = response_data["hasVirtualAccounts"]
+        record[:hasVirtual] = response_data["hasVirtualAccounts"]
         record[:company] = response_data["name"]
-        record[:requestId] = accounts_data[index]["requestId"]
+        record[:requestId] = accounts_data[index]["result"]["requestId"]
       end
 
       {
@@ -120,7 +119,7 @@ module WhiteBook
       response = Net::HTTP.get_response(uri)
 
       if (response.code != "200")
-        raise "#{JSON.parse(response.body)["message"]}"
+        raise JSON.parse(response.body)["message"]
       end
 
       response.body
@@ -185,7 +184,7 @@ module WhiteBook
     def create_file
       return unless @content_to_save != nil
 
-      request_date = Time.now.strftime("%Y-%m-%d_$H%i%s")
+      request_date = Time.now.strftime("%Y-%m-%d_%k%M%S")
       file_name = "#{request_date}_confirmation.json"
 
       out_file = File.new(@dir + file_name, "w")

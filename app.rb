@@ -30,7 +30,6 @@ def handler(event: nil, context: nil)
       body: JSON.generate(e)
     }
   end
-  end
 end
 
 # To launch script locally, uncomment this line,
