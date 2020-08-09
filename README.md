@@ -45,14 +45,16 @@ Sheet script reserves specific columns and cells:
 
 | Scope  | Description                 | Value type        |
 | ------ | --------------------------- | ----------------- |
-| A6:A36 | NIP numbers                 | Text              |
-| B6:B36 | Account numbers             | Text              |
+| A6:A36 | NIP numbers (optional)      | Text              |
+| B6:B36 | Account numbers (required)  | Text              |
 | C6:C36 | Found state value           | 0 &#124; 1        |
 | D6:D36 | Valid state value           | 0 &#124; 1        |
 | E6:E36 | Virtual account state value | 0 &#124; 1        |
+| F6:F36 | NIP                         | Number            |
+| G6:G36 | Company                     | Text              |
+| H6:H36 | Request ID                  | Text              |
 | B1     | Request date                | Date (YYYY-MM-DD) |
-| B2     | Request ID                  | Text              |
-| B3     | Confirmation file URL       | Text              |
+| B2     | Confirmation file URL       | Text              |
 
 ## AWS Lambda deployment
 
