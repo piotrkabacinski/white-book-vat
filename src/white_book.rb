@@ -35,14 +35,14 @@ module WhiteBook
 
       @accounts = sheet.map do |nip, account|
         {
-          nip: nil,
           account: account.to_s.tr('^0-9', ''),
           accountFound: false,
-          found: false,
-          valid: nil,
-          virtual: false,
           company: nil,
+          found: false,
+          nip: nil,
           requestId: nil
+          valid: false,
+          virtual: false,
         }
       end
 
@@ -77,11 +77,11 @@ module WhiteBook
 
       accounts.each_with_index do |record, index|
         next if record.nil?
-        next accounts_data[index].nil?
+        next if accounts_data[index].nil?
 
         response_data = accounts_data[index]["result"]["subjects"].first
 
-        record[:accountFound] = response_data["bankAccounts"].find { |bankAccount|
+        record[:accountFound] = response_data["accountNumbers"].find { |bankAccount|
           bankAccount == record[:account]
         }
 
@@ -90,14 +90,12 @@ module WhiteBook
         record[:nip] = response_data["nip"]
         record[:hasVirtualAccounts] = response_data["hasVirtualAccounts"]
         record[:company] = response_data["name"]
-        record[:requestId] = response_data["requestId"]
+        record[:requestId] = accounts_data[index]["requestId"]
       end
 
       {
         accounts: accounts,
-        date: @date,
-        request_id: @request_id,
-        confimation_response: confimation_response,
+        date: @date
       }
     end
 
@@ -187,8 +185,8 @@ module WhiteBook
     def create_file
       return unless @content_to_save != nil
 
-      scope_date = @date
-      file_name = "#{scope_date}_#{request_id}_confirmation.json"
+      request_date = Time.now.strftime("%Y-%m-%d_$H%i%s")
+      file_name = "#{request_date}_confirmation.json"
 
       out_file = File.new(@dir + file_name, "w")
       out_file.puts(@content_to_save)

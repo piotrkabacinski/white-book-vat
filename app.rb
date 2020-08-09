@@ -19,11 +19,9 @@ def handler(event: nil, context: nil)
     {
       statusCode: 200,
       body: JSON.generate({
-        data: results.to_json
-        # results: results[:accounts],
-        # request_id: results[:request_id],
-        # date: results[:date],
-        # confirmation_url: confirmation_url
+        results: results[:accounts],
+        date: results[:date],
+        confirmation_url: confirmation_url
       })
     }
   # rescue StandardError => e
