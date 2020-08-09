@@ -101,7 +101,7 @@ module WhiteBook
     def store
       return nil if confimation_response == nil
 
-      file = BucketS3.new(confimation_response, @date)
+      file = BucketS3.new(confimation_response.to_json, @date)
       file.store
     end
   end
