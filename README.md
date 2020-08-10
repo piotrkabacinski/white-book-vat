@@ -1,6 +1,6 @@
 # White Book VAT
 
-🇵🇱Sprawdź konta bankowe na podstawie NIP w API [Biała Księga](https://www.gov.pl/web/kas/api-wykazu-podatnikow-vat) Ministerstwa Finansów.
+🇵🇱 Sprawdź konta bankowe na podstawie NIP w API [Biała Księga](https://www.gov.pl/web/kas/api-wykazu-podatnikow-vat) Ministerstwa Finansów.
 
 Check VAT bank accounts using [MF API](https://www.gov.pl/web/kas/api-wykazu-podatnikow-vat) and Google Sheets.
 
@@ -45,7 +45,7 @@ Sheet script reserves specific columns and cells:
 
 | Scope  | Description                 | Value type        |
 | ------ | --------------------------- | ----------------- |
-| A6:A36 | NIP numbers (optional)      | Text              |
+| A6:A36 | NIPs (optional)             | Text              |
 | B6:B36 | Account numbers (required)  | Text              |
 | C6:C36 | Found state value           | 0 &#124; 1        |
 | D6:D36 | Valid state value           | 0 &#124; 1        |
@@ -77,16 +77,6 @@ docker run -it -v $PWD:/home/app white-book-vat bash
 
 ruby app.rb
 ```
-
-## TODO
-
-- ~~Read data from Google Sheets via API~~
-- ~~Request data from [MF API](https://wl-api.mf.gov.pl/)~~
-- ~~Return results~~
-- ~~Tests~~
-- ~~Deploy to AWS Lambda~~
-- ~~Store confirmation files in S3 bucket~~
-- ~~Create UI~~
 
 ## Licence
 
