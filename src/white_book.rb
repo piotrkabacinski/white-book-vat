@@ -55,7 +55,7 @@ module WhiteBook
 
       accounts_data = []
 
-      @accounts.each { |subject|
+      @accounts.each do |subject|
         if subject[:account] == ""
           accounts_data.push(nil)
           next
@@ -63,7 +63,7 @@ module WhiteBook
 
         account_data = mf_api.account_data(subject[:account])
         accounts_data.push(JSON.parse(account_data))
-      }
+      end
 
       @confimation_response = accounts_data.freeze
       @accounts_data = accounts_data
