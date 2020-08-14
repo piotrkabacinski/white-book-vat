@@ -11,7 +11,7 @@ Dotenv.load ".env"
 
 module WhiteBook
   class VAT
-    attr_reader :accounts, :accounts_data, :confimation_response, :search_id, :date
+    attr_reader :accounts, :accounts_data, :search_id, :date
 
     def initialize(sheet_raw_data = nil, date = nil)
       @sheet_raw_data = sheet_raw_data
@@ -53,22 +53,12 @@ module WhiteBook
     def create_accounts_data
       mf_api = MfAPI.new(@date)
 
-      accounts_data = []
-
-      @accounts.each do |subject|
-        if subject[:account] == ""
-          accounts_data.push(nil)
-          next
-        end
+      @accounts_data = accounts.map do |subject|
+        return nil if subject[:account] == ""
 
         account_data = mf_api.account_data(subject[:account])
-        accounts_data.push(JSON.parse(account_data))
+        JSON.parse(account_data)
       end
-
-      @confimation_response = accounts_data.freeze
-      @accounts_data = accounts_data
-
-      @accounts_data
     end
 
     def check_accounts
@@ -102,9 +92,9 @@ module WhiteBook
     end
 
     def store
-      return nil if confimation_response == nil
+      return if accounts_data.nil?
 
-      file = BucketS3.new(confimation_response.to_json, @date)
+      file = BucketS3.new(accounts_data.to_json, @date)
       file.store
     end
   end
