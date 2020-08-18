@@ -76,36 +76,53 @@ describe VAT do
 
     expect(results.select { |result| result[:found] }.size).to be 2
 
-    expect(results[0][:found]).to be true
-    expect(results[0][:accountFound]).to be true
-    expect(results[0][:valid]).to be true
-    expect(results[0][:hasVirtual]).to be false
-    expect(results[0][:nip]).equal? "1002003000"
-    expect(results[0][:requestId]).equal? "abc-123"
-    expect(results[0][:checked]).to be true
+    expect(results[0]).to eq ({
+      account: "123",
+      found: true,
+      company: "Foo bar",
+      accountFound: true,
+      valid: true,
+      hasVirtual: false,
+      nip: "1002003000",
+      requestId: "abc-123",
+      checked: true
+    })
 
-    expect(results[1][:found]).to be true
-    expect(results[1][:valid]).to be true
-    expect(results[1][:accountFound]).to be false
-    expect(results[1][:hasVirtual]).to be true
-    expect(results[1][:nip]).equal? "9002005000"
-    expect(results[1][:requestId]).equal? "defg-123"
-    expect(results[1][:checked]).to be true
+    expect(results[1]).to eq ({
+      account: "456",
+      found: true,
+      company: "Baz",
+      accountFound: false,
+      valid: true,
+      hasVirtual: true,
+      nip: "9002005000",
+      requestId: "defg-123",
+      checked: true
+    })
 
-    expect(results[2][:found]).to be false
-    expect(results[2][:valid]).to be false
-    expect(results[2][:accountFound]).to be false
-    expect(results[2][:hasVirtual]).to be false
-    expect(results[2][:nip]).equal? nil
-    expect(results[2][:requestId]).equal? nil
-    expect(results[2][:checked]).to be false
+    expect(results[2]).to eq ({
+      account: "",
+      found: false,
+      company: nil,
+      accountFound: false,
+      valid: false,
+      hasVirtual: false,
+      nip: nil,
+      requestId: nil,
+      checked: false
+    })
 
-    expect(results[3][:found]).to be false
-    expect(results[3][:valid]).to be false
-    expect(results[3][:accountFound]).to be false
-    expect(results[3][:hasVirtual]).to be false
-    expect(results[3][:checked]).to be true
-    expect(results[2][:requestId]).equal? "foo-987"
+    expect(results[3]).to eq ({
+      account: "000",
+      found: false,
+      company: nil,
+      accountFound: false,
+      valid: false,
+      hasVirtual: false,
+      nip: nil,
+      requestId: "foo-987",
+      checked: true
+    })
   end
 
   it "Should store file" do
