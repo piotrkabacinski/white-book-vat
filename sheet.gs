@@ -26,12 +26,9 @@ function formatDate(date) {
 function checkData() {
   var sheet = SpreadsheetApp.getActiveSheet();
 
-  sheet.getRange("C6:C36").clearContent();
-  sheet.getRange("D6:D36").clearContent();
-  sheet.getRange("E6:E36").clearContent();
-  sheet.getRange("F6:F36").clearContent();
-  sheet.getRange("G6:G36").clearContent();
-  sheet.getRange("H6:H36").clearContent();
+  ["C", "D", "E", "F", "G", "H"].forEach((c) => {
+    sheet.getRange(`${c}6:${c}36`).clearContent();
+  });
 
   var dateTimeCell = sheet.getRange("B1");
   var confirmationCell = sheet.getRange("B2");
