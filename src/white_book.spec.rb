@@ -56,6 +56,7 @@ describe VAT do
     expect(subject.accounts.length).to be 4
   end
 
+
   it "Should return today request date when no declared" do
     expect(subject.date).equal? Time.now.strftime("%Y-%m-%d")
   end
@@ -89,7 +90,7 @@ describe VAT do
     expect(results[1][:hasVirtual]).to be true
     expect(results[1][:nip]).equal? "9002005000"
     expect(results[1][:requestId]).equal? "defg-123"
-    expect(results[0][:checked]).to be true
+    expect(results[1][:checked]).to be true
 
     expect(results[2][:found]).to be false
     expect(results[2][:valid]).to be false
@@ -101,7 +102,7 @@ describe VAT do
 
     expect(results[3][:found]).to be false
     expect(results[3][:valid]).to be false
-    expect(results[2][:accountFound]).to be false
+    expect(results[3][:accountFound]).to be false
     expect(results[3][:hasVirtual]).to be false
     expect(results[3][:checked]).to be true
     expect(results[2][:requestId]).equal? "foo-987"

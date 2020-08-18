@@ -53,11 +53,11 @@ module WhiteBook
     def create_accounts_data
       mf_api = MfAPI.new(@date)
 
-      @accounts_data = accounts.map do |subject|
-        return nil if subject[:account] == ""
-
-        account_data = mf_api.account_data(subject[:account])
-        JSON.parse(account_data)
+      @accounts_data = @accounts.map do |subject|
+        if subject[:account] != ""
+          account_data = mf_api.account_data(subject[:account])
+          JSON.parse(account_data)
+        end
       end
     end
 
@@ -67,8 +67,7 @@ module WhiteBook
       end
 
       accounts.each_with_index do |record, index|
-        next if record.nil?
-        next if accounts_data[index].nil?
+        next if record.nil? or accounts_data[index].nil?
 
         response_data = accounts_data[index]["result"]["subjects"].first
 
@@ -105,7 +104,7 @@ module WhiteBook
     end
 
     def account_data(account_number = nil)
-      return nil if account_number == nil
+      return unless account_number
 
       uri = mf_uri(account_number)
 
