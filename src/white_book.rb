@@ -54,7 +54,7 @@ module WhiteBook
       mf_api = MfAPI.new(@date)
 
       @accounts_data = @accounts.map do |subject|
-        if not subject[:account].to_s.strip.empty?
+        unless subject[:account].to_s.strip.empty?
           account_data = mf_api.account_data(subject[:account])
           JSON.parse(account_data)
         end
