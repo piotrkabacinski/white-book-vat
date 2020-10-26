@@ -35,4 +35,4 @@ end
 # To launch script locally, uncomment this line,
 # sheet data will be requested by script directly:
 
-puts handler
+# puts handler
