@@ -69,19 +69,21 @@ module WhiteBook
       accounts.each_with_index do |record, index|
         next if record.nil? or accounts_data[index].nil?
 
-        response_data = accounts_data[index]["result"]["subjects"].first
+        response_data = accounts_data[index]["result"]["entries"].first
 
         record[:checked] = true
         record[:requestId] = accounts_data[index]["result"]["requestId"]
 
         next if response_data.nil?
 
-        record[:accountFound] = response_data["accountNumbers"].include?(record[:account])
+        item = response_data["subjects"].first
+
+        record[:accountFound] = item["accountNumbers"].include?(record[:account])
         record[:found] = true
-        record[:valid] = response_data["statusVat"] == "Czynny"
-        record[:nip] = response_data["nip"]
-        record[:hasVirtual] = response_data["hasVirtualAccounts"]
-        record[:company] = response_data["name"]
+        record[:valid] = item["statusVat"] == "Czynny"
+        record[:nip] = item["nip"]
+        record[:hasVirtual] = item["hasVirtualAccounts"]
+        record[:company] = item["name"]
       end
 
       {
