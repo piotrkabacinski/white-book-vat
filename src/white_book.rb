@@ -78,6 +78,8 @@ module WhiteBook
 
         item = response_data["subjects"].first
 
+        next if item.nil?
+
         record[:accountFound] = item["accountNumbers"].include?(record[:account])
         record[:found] = true
         record[:valid] = item["statusVat"] == "Czynny"

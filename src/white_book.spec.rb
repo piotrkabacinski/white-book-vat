@@ -23,18 +23,20 @@ describe VAT do
 
     stub_request(:get, "https://wl-api.mf.gov.pl/api/search/bank-accounts/123?date=#{date}").to_return(
       status: 200,
-      body: '{"result": {"subjects": [{"name": "Foo bar", "nip": "1002003000", "statusVat": "Czynny", "accountNumbers": ["123"], "hasVirtualAccounts": false } ], "requestId": "abc-123" } }',
+      body: '{"result":{"entries":[{"subjects":[{"name":"Foo bar","nip":"1002003000","statusVat":"Czynny","accountNumbers":["123"],"hasVirtualAccounts":false}]}],"requestId":"abc-123"}}',
     )
 
     stub_request(:get, "https://wl-api.mf.gov.pl/api/search/bank-accounts/456?date=#{date}").to_return(
       status: 200,
-      body: '{"result": {"subjects": [{"name": "Baz", "nip": "9002005000", "statusVat": "Czynny", "accountNumbers": ["900"], "hasVirtualAccounts": true } ], "requestId": "defg-123"} }',
+      body: '{"result":{"entries":[{"subjects":[{"name":"Baz","nip":"9002005000","statusVat":"Czynny","accountNumbers":["900"],"hasVirtualAccounts":true}]}],"requestId":"defg-123"}}',
     )
 
     stub_request(:get, "https://wl-api.mf.gov.pl/api/search/bank-accounts/000?date=#{date}").to_return(
       status: 200,
-      body: '{"result":{"subjects":[],"requestId":"foo-987"}}'
+      body: '{"result":{"entries":[{"subjects":[]}],"requestId":"foo-987"}}'
     )
+
+    60102011270000170203219854
 
     stub_request(:put, /amazonaws.com/).to_return(status: 200)
 
