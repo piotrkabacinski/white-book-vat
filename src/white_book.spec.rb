@@ -125,6 +125,8 @@ describe VAT do
     })
   end
 
+  # TODO: Fix stubbing aws-s3-sdk:
+
   # it "Should store file" do
   #   path = subject.store
 
