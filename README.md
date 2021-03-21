@@ -55,7 +55,7 @@ Sheet script reserves specific columns and cells:
 | F6:F36 | NIP                         | Number            |
 | G6:G36 | Company                     | Text              |
 | H6:H36 | Request ID                  | Text              |
-| B1     | Request date                | Date (YYYY-MM-DD) |
+| B1     | Request date (if empty, will set current date)                | Date (YYYY-MM-DD) |
 | B2     | Confirmation file URL       | Text              |
 
 ## AWS Lambda deployment
