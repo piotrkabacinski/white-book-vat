@@ -4,7 +4,7 @@
 
 Check VAT bank accounts using [MF API](https://www.gov.pl/web/kas/api-wykazu-podatnikow-vat) and Google Sheets.
 
-<img src="https://white-book-vat.s3-eu-west-1.amazonaws.com/wb_2.gif" height="250" alt="White Book previe" />
+<img src="https://white-book-vat.s3-eu-west-1.amazonaws.com/wb_2.gif" height="250" alt="White Book preview" />
 
 ## Setup
 
@@ -21,7 +21,7 @@ Using Google Sheets as a data source:
 - Enable Google Drive and Sheets API for the project (Library > _Selected API_ > Enable)
 - Go to Credentials section:
   - Create Credentials > Service account > Create
-  - Role: "Borwser" > Continue
+  - Role: "Browser" > Continue
   - Create kye > Key type: JSON > Create
   - Save file in project's root.
 - In Google Sheets App: share selected sheet with user from `client_email` key in service account json file
